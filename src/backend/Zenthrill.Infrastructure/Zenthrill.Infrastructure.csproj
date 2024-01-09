@@ -7,7 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Providers.DependencyInjection\Zenthrill.Providers.DependencyInjection.csproj" />
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Settings.DependencyInjection\Zenthrill.Settings.DependencyInjection.csproj" />
       <ProjectReference Include="..\Zenthrill.Application\Zenthrill.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

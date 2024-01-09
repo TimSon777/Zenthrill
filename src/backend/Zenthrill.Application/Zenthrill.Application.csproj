@@ -7,7 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\backend\Zenthrill.Domain\Zenthrill.Domain.csproj" />
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Outbox.Core\Zenthrill.Outbox.Core.csproj" />
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Providers\Zenthrill.Providers.csproj" />
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Settings\Zenthrill.Settings.csproj" />
+      <ProjectReference Include="..\Zenthrill.Domain\Zenthrill.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="11.9.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+      <PackageReference Include="Neo4j.Driver" Version="5.15.0" />
     </ItemGroup>
 
 </Project>
