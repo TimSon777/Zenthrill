@@ -1,0 +1,1 @@
+﻿global using IGraphDatabaseDriver = Neo4j.Driver.IDriver;

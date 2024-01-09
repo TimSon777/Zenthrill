@@ -1,6 +1,20 @@
 version: 2.23.3
 
-services: 
+services:
+  graph_database:
+    image: neo4j:enterprise
+    ports:
+      - ${GRAPH_DATABASE_EXTERNAL_PORT}:${GRAPH_DATABASE_INTERNAL_PORT}
+      - ${GRAPH_DATABASE_BROWSER_EXTERNAL_PORT}:${GRAPH_DATABASE_BROWSER_INTERNAL_PORT}
+    environment:
+      - NEO4J_AUTH=${GRAPH_DATABASE_USER}/${GRAPH_DATABASE_PASSWORD}
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+    volumes:
+      - ./volumes/graph_database:/data \
+      - ./volumes/graph_database:/logs \
+      - ./volumes/graph_database:/var/lib/neo4j/import \
+      - ./volumes/graph_database:/plugins \
+
   main_database:
     image: postgres:latest
     ports:
@@ -28,3 +42,20 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=${ENVIRONMENT}
       - DATABASE_CONNECTION_STRING=Host=main_database;Port=${MAIN_DATABASE_INTERNAL_PORT};User ID=${MAIN_DATABASE_USER};Password=${MAIN_DATABASE_PASSWORD};Database=${MAIN_DATABASE_NAME}
+
+  story_broker:
+    image: rabbitmq:3.10.7-management
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=${STORY_BROKER_USER}
+      - RABBITMQ_DEFAULT_PASS=${STORY_BROKER_PASSWORD}
+    ports:
+      - ${STORY_BROKER_BROWSER_EXTERNAL_PORT}:${STORY_BROKER_BROWSER_INTERNAL_PORT}
+      - ${STORY_BROKER_EXTERNAL_PORT}:${STORY_BROKER_INTERNAL_PORT}
+
+  story_redis:
+    image: bitnami/redis
+    environment:
+      - REDIS_PASSWORD=${STORY_REDIS_PASSWORD}
+    ports:
+      - ${STORY_REDIS_EXTERNAL_PORT}:${STORY_REDIS_INTERNAL_PORT}

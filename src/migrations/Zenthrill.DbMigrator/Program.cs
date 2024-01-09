@@ -24,7 +24,7 @@ var serviceProvider = new ServiceCollection()
     .ConfigureRunner(rb => rb
         .AddPostgres()
         .WithGlobalConnectionString(connectionString)
-        .ScanIn(typeof(AddFragmentTable).Assembly).For.Migrations())
+        .ScanIn(typeof(AddUserTable).Assembly).For.Migrations())
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider();
 
