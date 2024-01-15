@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.APIResponses\Zenthrill.APIResponses.csproj" />
       <ProjectReference Include="..\Zenthrill.Infrastructure\Zenthrill.Infrastructure.csproj" />
     </ItemGroup>
 

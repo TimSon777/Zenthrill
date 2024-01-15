@@ -12,8 +12,8 @@ public sealed class StoryInfoConfiguration : IEntityTypeConfiguration<StoryInfo>
         builder
             .Property(storyInfo => storyInfo.Id)
             .HasConversion(
-                x => x.Id,
-                x => new StoryInfoId { Id = x });
+                x => x.Value,
+                x => new StoryInfoId(x));
 
         builder
             .Property(storyInfo => storyInfo.Version)
@@ -24,13 +24,11 @@ public sealed class StoryInfoConfiguration : IEntityTypeConfiguration<StoryInfo>
         builder
             .Property(storyInfo => storyInfo.EntrypointFragmentId)
             .HasConversion(
-                x => x.Id,
-                x => new FragmentId { Id = x });
-        
+                x => x.Value,
+                x => new FragmentId(x));
+
         builder
-            .Property(storyInfo => storyInfo.CreatorId)
-            .HasConversion(
-                x => x.Id,
-                x => new UserId { Id = x });
+            .Property(x => x.CreatorId)
+            .HasColumnName("CreatorId");
     }
 }

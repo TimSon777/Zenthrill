@@ -1,12 +1,19 @@
-﻿using Zenthrill.Domain.Common;
+﻿using StronglyTypedIds;
+using Zenthrill.Domain.Common;
 
 namespace Zenthrill.Domain.Entities;
 
-public sealed class BranchId : HasId<Guid>;
+[StronglyTypedId(Template.Guid)]
+public partial struct BranchId;
 
 public sealed class Branch : Entity<BranchId>
 {
-    public required string Name { get; set; }
+    public required string Inscription { get; set; }
 
     public required List<Fragment> Fragments { get; set; }
+
+    public Branch()
+    {
+        Id = BranchId.New();
+    }
 }

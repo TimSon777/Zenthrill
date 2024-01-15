@@ -6,13 +6,18 @@ builder.AddGraphDatabaseConfiguration();
 builder.AddApplicationDbContextConfiguration();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+    options.CustomSchemaIds(x => x.FullName));
 
 builder.Services.AddDateTimeOffsetProvider();
 builder.Services.AddFeaturesValidators();
 
+builder.Services.AddWebApiMappers();
+
 builder.Services
-    .AddCreateStoryFeature();
+    .AddCreateStoryFeature()
+    .AddCreateBranchFeature()
+    .AddCreateFragmentFeature();
 
 var app = builder.Build();
 

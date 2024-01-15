@@ -4,7 +4,6 @@ using Success = OneOf.Types.Success;
 
 namespace Zenthrill.Application.Services;
 
-
 public interface IGraphDatabase
 {
     Task<OneOf.OneOf<Success, DatabaseAlreadyExists>> CreateGraphAsync(string name);
@@ -12,7 +11,7 @@ public interface IGraphDatabase
     Task<OneOf.OneOf<Id<long>>> CreateNodeAsync<TValue>(string database, TValue value, IEnumerable<string> labels)
         where TValue : notnull;
 
-    Task CreateRelationshipAsync<TLeftValue, TValue, TRightValue>(
+    Task<List<Id<long>>> CreateRelationshipAsync<TLeftValue, TValue, TRightValue>(
         string database,
         TLeftValue leftMatch,
         TRightValue rightMatch,

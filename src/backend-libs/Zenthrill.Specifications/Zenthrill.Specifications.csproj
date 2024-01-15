@@ -6,9 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="OneOf" Version="3.0.263" />
-      <PackageReference Include="StronglyTypedId" Version="1.0.0-beta07" />
-    </ItemGroup>
-
 </Project>

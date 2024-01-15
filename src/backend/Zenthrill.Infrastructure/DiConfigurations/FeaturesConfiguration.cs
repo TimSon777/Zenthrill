@@ -1,4 +1,5 @@
-﻿using Zenthrill.Application.Features.Entrypoint;
+﻿using Zenthrill.Application.Features.Branch;
+using Zenthrill.Application.Features.Fragment;
 using Zenthrill.Application.Features.Story;
 
 // ReSharper disable once CheckNamespace
@@ -11,8 +12,13 @@ public static class FeaturesConfiguration
         return services.AddScoped<IStoryCreator, StoryCreator>();
     }
 
-    public static IServiceCollection AddCreateEntrypointFeature(this IServiceCollection services)
+    public static IServiceCollection AddCreateBranchFeature(this IServiceCollection services)
     {
-        return services.AddScoped<IEntrypointCreator, EntrypointCreator>();
+        return services.AddScoped<IBranchCreator, BranchCreator>();
+    }
+
+    public static IServiceCollection AddCreateFragmentFeature(this IServiceCollection services)
+    {
+        return services.AddScoped<IFragmentCreator, FragmentCreator>();
     }
 }

@@ -17,7 +17,9 @@ public static class ApplicationDbContextConfigurations
         builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>((sp, options) =>
         {
             var settings = sp.GetOptions<MainDatabaseSettings>();
-            options.UseNpgsql(settings.ConnectionString);
+            options
+                .UseNpgsql(settings.ConnectionString)
+                .EnableSensitiveDataLogging(settings.EnableSensitiveDataLogging);
         });
 
         return builder;

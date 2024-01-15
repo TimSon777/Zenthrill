@@ -1,7 +1,6 @@
 ﻿namespace Zenthrill.Domain.Common;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>
-    where TId : IHasId
 {
     public TId Id { get; set; }
 
@@ -18,6 +17,16 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
         }
 
         return EqualityComparer<TId>.Default.Equals(Id, other.Id);
+    }
+
+    public static bool operator ==(Entity<TId> a, Entity<TId> b)
+    {
+        return a.Equals(b);
+    }
+
+    public static bool operator !=(Entity<TId> a, Entity<TId> b)
+    {
+        return !(a == b);
     }
 
     public override bool Equals(object? obj)
