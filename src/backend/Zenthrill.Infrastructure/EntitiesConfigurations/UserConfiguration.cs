@@ -11,7 +11,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder
             .Property(user => user.Id)
             .HasConversion(
-                x => x.Id,
-                x => new UserId { Id = x });
+                x => x.Value,
+                x => new UserId(x));
     }
 }

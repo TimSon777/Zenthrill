@@ -1,19 +1,16 @@
 ﻿using FluentValidation;
 using OneOf;
-using Zenthrill.Application.OutboxMessages;
 using Zenthrill.Application.Results;
 using Zenthrill.Domain.Entities;
 using Zenthrill.Domain.ValueObjects;
-using Zenthrill.Outbox.Core;
-using Zenthrill.Providers;
 
 namespace Zenthrill.Application.Features.Story;
 
 public sealed class CreateStoryRequest
 {
-    public required User User { get; set; }
+    public required User User { get; init; }
 
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 }
 
 public sealed class CreateStoryRequestValidator : AbstractValidator<CreateStoryRequest>
@@ -32,7 +29,6 @@ public interface IStoryCreator
 
 public sealed class StoryCreator(
     IApplicationDbContext applicationDbContext,
-    IDateTimeOffsetProvider dateTimeOffsetProvider,
     IValidator<CreateStoryRequest> validator) : IStoryCreator
 {
     public async Task<OneOf<StoryInfoId, ValidationFailure>> CreateAsync(CreateStoryRequest request, CancellationToken cancellationToken)
@@ -46,10 +42,7 @@ public sealed class StoryCreator(
 
         var version = StoryVersion.Create(1, 0, "0").AsT0;
 
-        var entrypointFragmentId = new FragmentId
-        {
-            Id = Guid.NewGuid()
-        };
+        var entrypointFragmentId = FragmentId.New();
 
         applicationDbContext.Users.Attach(request.User);
         var storyInfo = new StoryInfo
@@ -60,17 +53,7 @@ public sealed class StoryCreator(
             Version = version
         };
 
-        var createStoryEntrypointOutboxMessage = new CreateStoryEntrypointOutboxMessage(entrypointFragmentId);
-
-        var outboxMessage = new OutboxMessage
-        {
-            ScheduledAt = dateTimeOffsetProvider.UtcNow,
-        };
-
-        outboxMessage.SetMessage(createStoryEntrypointOutboxMessage);
-
         applicationDbContext.StoryInfos.Add(storyInfo);
-        applicationDbContext.OutboxMessages.Add(outboxMessage);
 
         await applicationDbContext.SaveChangesAsync(cancellationToken);
 

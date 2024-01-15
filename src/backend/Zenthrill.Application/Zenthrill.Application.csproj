@@ -10,6 +10,7 @@
       <ProjectReference Include="..\..\backend-libs\Zenthrill.Outbox.Core\Zenthrill.Outbox.Core.csproj" />
       <ProjectReference Include="..\..\backend-libs\Zenthrill.Providers\Zenthrill.Providers.csproj" />
       <ProjectReference Include="..\..\backend-libs\Zenthrill.Settings\Zenthrill.Settings.csproj" />
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Specifications\Zenthrill.Specifications.csproj" />
       <ProjectReference Include="..\Zenthrill.Domain\Zenthrill.Domain.csproj" />
     </ItemGroup>
 
@@ -19,6 +20,10 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
       <PackageReference Include="Neo4j.Driver" Version="5.15.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Results\GraphDatabase\" />
     </ItemGroup>
 
 </Project>

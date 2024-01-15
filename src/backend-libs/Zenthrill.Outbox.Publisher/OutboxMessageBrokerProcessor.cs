@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using StackExchange.Redis;
 using Zenthrill.Outbox.Core;
-using Zenthrill.Providers;
 
 namespace Zenthrill.Outbox.Publisher;
 

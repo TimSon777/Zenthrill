@@ -53,7 +53,7 @@ public sealed class GraphDatabase(IGraphDatabaseDriver graphDatabaseDriver) : IG
         return Id.Create(result[0].As<long>());
     }
 
-    public async Task CreateRelationshipAsync<TLeftValue, TValue, TRightValue>(
+    public async Task<List<Id<long>>> CreateRelationshipAsync<TLeftValue, TValue, TRightValue>(
         string database,
         TLeftValue leftMatch,
         TRightValue rightMatch,
@@ -72,18 +72,22 @@ public sealed class GraphDatabase(IGraphDatabaseDriver graphDatabaseDriver) : IG
         var query = $"""
                      MATCH (a {leftProperties}), (b {rightProperties})
                      CREATE (a)-[:{convertedLabels} $props]->(b)
-                     RETURN a, b
+                     RETURN id(a), id(b)
                      """;
 
-        await session.ExecuteWriteAsync(async runner =>
+        var result = await session.ExecuteWriteAsync(async runner =>
         {
-            await runner.RunAsync(query, new
+            var cursor = await runner.RunAsync(query, new
             {
                 props = properties
             });
 
-            return 0;
+            return await cursor.ToListAsync();
         });
+
+        return result
+            .Select(r => Id.Create(r[0].As<long>()))
+            .ToList();
     }
 
     public async Task<(TValue Value, IEnumerable<string> Labels)> FindNodeAsync<TValue, TMatch>(string database, TMatch match)
@@ -117,30 +121,30 @@ public sealed class GraphDatabase(IGraphDatabaseDriver graphDatabaseDriver) : IG
             return new Dictionary<string, object?>();
         }
 
+        if (value is Dictionary<string, object?> dict)
+        {
+            return dict
+                .ToDictionary(
+                    pair => pair.Key,
+                    pair => ConvertValue(pair.Value));
+        }
+
         return value
             .GetType()
             .GetProperties()
             .ToDictionary(
                 property => property.Name,
-                property =>
-                {
-                    var val = property.GetValue(value);
+                property => ConvertValue(property.GetValue(value)));
 
-                    if (val is not IHasId)
-                    {
-                        return val;
-                    }
+        object? ConvertValue(object? val)
+        {
+            if (val is Guid guid)
+            {
+                return guid.ToString();
+            }
 
-                    var id = val.GetType().GetProperty("Id")!.GetValue(val);
-
-                    if (id is Guid guid)
-                    {
-                        return guid.ToString();
-                    }
-
-                    return id;
-
-                });
+            return val;
+        }
     }
 
     private static string ConvertToStringProperties<TValue>(TValue value)

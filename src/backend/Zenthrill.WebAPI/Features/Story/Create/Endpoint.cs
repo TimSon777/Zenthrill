@@ -1,24 +1,22 @@
-﻿using Zenthrill.Application.Features.Story;
-using Zenthrill.Domain.Entities;
+﻿using Zenthrill.APIResponses;
+using Zenthrill.Application.Features.Story;
 
 namespace Zenthrill.WebAPI.Features.Story.Create;
 
 public static class Endpoint
 {
-    public static async Task<IResult> Create(Request request, IStoryCreator storyCreator, CancellationToken cancellationToken)
+    public static async Task<IResult> Create(
+        Request request,
+        IStoryCreator storyCreator,
+        IMapper mapper,
+        CancellationToken cancellationToken)
     {
-        var createStoryRequest = new CreateStoryRequest
-        {
-            Name = request.Name,
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId { Id = new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6") }
-            }
-        };
+        var createStoryRequest = mapper.MapToApplicationRequest(request);
 
         var result = await storyCreator.CreateAsync(createStoryRequest, cancellationToken);
 
-        return TypedResults.Ok(result.Value);
+        return result.Match<IResult>(
+            storyInfoId => TypedResults.Ok(ApiResponses.Success(new Response { Id = storyInfoId.Value })),
+            validationFailure => TypedResults.BadRequest(ApiResponses.Failure(DefaultStatusCodes.BadRequest, validationFailure.Errors)));
     }
 }
