@@ -4,6 +4,7 @@
 public static class IReadOnlyDictionary
 {
     public static T ToObject<T>(this IReadOnlyDictionary<string, object?> src)
+        where T : notnull
     {
         var obj = Activator.CreateInstance<T>();
 
@@ -15,8 +16,17 @@ public static class IReadOnlyDictionary
             {
                 continue;
             }
-            
-            if (value != null && property.CanWrite && property.PropertyType.IsInstanceOfType(value))
+
+            if (value == null || !property.CanWrite)
+            {
+                continue;
+            }
+
+            if (value is string str && Guid.TryParse(str, out var guid))
+            {
+                property.SetValue(obj, guid);
+            }
+            else
             {
                 property.SetValue(obj, value);
             }

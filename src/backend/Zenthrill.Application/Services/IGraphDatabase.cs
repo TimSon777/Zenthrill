@@ -1,4 +1,5 @@
-﻿using Zenthrill.Application.Results;
+﻿using Zenthrill.Application.GraphDatabaseOrm;
+using Zenthrill.Application.Results;
 using Zenthrill.Domain.ValueObjects;
 using Success = OneOf.Types.Success;
 
@@ -18,5 +19,12 @@ public interface IGraphDatabase
         TValue value,
         IEnumerable<string> labels);
 
-    Task<(TValue Value, IEnumerable<string> Labels)> FindNodeAsync<TValue, TMatch>(string database, TMatch match);
+    Task<(TValue? Value, IEnumerable<string> Labels)> FindNodeAsync<TValue, TMatch>(string database, TMatch match)
+        where TValue : notnull;
+
+    Task<MatchByLabelResponse<TNode, TBranch>> GetNodesAndRelationshipsAsync<TNode, TBranch>(
+        string database,
+        string label)
+        where TNode : notnull
+        where TBranch : notnull;
 }

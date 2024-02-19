@@ -11,10 +11,11 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddDateTimeOffsetProvider();
 builder.Services.AddFeaturesValidators();
-
+builder.Services.AddLabelsConstructor();
 builder.Services.AddWebApiMappers();
 
 builder.Services
+    .AddReadStoryFeature()
     .AddCreateStoryFeature()
     .AddCreateBranchFeature()
     .AddCreateFragmentFeature();

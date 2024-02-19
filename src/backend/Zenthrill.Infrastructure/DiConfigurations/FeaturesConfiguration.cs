@@ -12,6 +12,11 @@ public static class FeaturesConfiguration
         return services.AddScoped<IStoryCreator, StoryCreator>();
     }
 
+    public static IServiceCollection AddReadStoryFeature(this IServiceCollection services)
+    {
+        return services.AddScoped<IStoryReader, StoryReader>();
+    }
+
     public static IServiceCollection AddCreateBranchFeature(this IServiceCollection services)
     {
         return services.AddScoped<IBranchCreator, BranchCreator>();

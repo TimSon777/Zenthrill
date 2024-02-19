@@ -15,6 +15,11 @@ public sealed class User : Entity<UserId>
         Id = UserId.New();
     }
 
+    public bool HasAccessToRead(StoryInfo _)
+    {
+        return true;
+    }
+
     public bool HasAccessToUpdate(StoryInfo storyInfo)
     {
         return this == storyInfo.Creator;

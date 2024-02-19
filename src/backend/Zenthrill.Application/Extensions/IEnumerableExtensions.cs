@@ -7,4 +7,24 @@ public static class IEnumerableExtensions
     {
         return string.Join(separator, src);
     }
+
+    public static (IList<T>, IList<T>) DivideBy<T>(this IEnumerable<T> src, Func<T, bool> predicate)
+    {
+        var trueList = new List<T>();
+        var falseList = new List<T>();
+
+        foreach (var e in src)
+        {
+            if (predicate(e))
+            {
+                trueList.Add(e);
+            }
+            else
+            {
+                falseList.Add(e);
+            }
+        }
+
+        return (trueList, falseList);
+    }
 }
