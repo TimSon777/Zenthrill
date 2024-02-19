@@ -1,9 +1,10 @@
-﻿using Neo4j.Driver;
+﻿using System.Collections.ObjectModel;
+using Neo4j.Driver;
 using OneOf.Types;
 using Zenthrill.Application.Extensions;
+using Zenthrill.Application.GraphDatabaseOrm;
 using Zenthrill.Application.Results;
 using Zenthrill.Application.Services;
-using Zenthrill.Domain.Common;
 using Zenthrill.Domain.ValueObjects;
 
 namespace Zenthrill.Infrastructure.Services;
@@ -90,7 +91,8 @@ public sealed class GraphDatabase(IGraphDatabaseDriver graphDatabaseDriver) : IG
             .ToList();
     }
 
-    public async Task<(TValue Value, IEnumerable<string> Labels)> FindNodeAsync<TValue, TMatch>(string database, TMatch match)
+    public async Task<(TValue? Value, IEnumerable<string> Labels)> FindNodeAsync<TValue, TMatch>(string database, TMatch match)
+        where TValue : notnull
     {
         await using var session = graphDatabaseDriver.AsyncSession(builder =>
             builder.WithDatabase(database));
@@ -112,6 +114,66 @@ public sealed class GraphDatabase(IGraphDatabaseDriver graphDatabaseDriver) : IG
         var value = node.Properties.ToObject<TValue>();
         
         return (value, node.Labels);
+    }
+
+    public async Task<MatchByLabelResponse<TNode, TBranch>> GetNodesAndRelationshipsAsync<TNode, TBranch>(string database, string label) where TNode : notnull where TBranch : notnull
+    {
+        await using var session = graphDatabaseDriver.AsyncSession(builder =>
+            builder.WithDatabase(database));
+
+        var query = $"""
+                     MATCH (node:{label}) -[r]- ()
+                     RETURN DISTINCT node, collect(r) as relationship
+                     """;
+
+        var (nodes, relationships) = await session.ExecuteReadAsync(async runner =>
+        {
+            var cursor = await runner.RunAsync(query);
+            var list = await cursor.ToListAsync();
+
+            var ormNodes = list
+                .SelectMany(e => e.Values
+                    .Where(v => v.Key == "node")
+                    .Select(v => v.Value))
+                .Cast<INode>()
+                .ToList();
+            
+            var dictNodes = ormNodes
+                .Select(v =>
+                {
+                    var node = v.Properties.ToObject<TNode>();
+                    _ = node.TrySetValue("Labels", new ReadOnlyCollection<string>(v.Labels.ToList()));
+                    return KeyValuePair.Create(v, node);
+                })
+                .ToDictionary();
+
+            var nodes = dictNodes.Select(x => x.Value);
+
+            var relationships = list
+                .SelectMany(e => e.Values)
+                .Where(v => v.Key == "relationship")
+                .Select(v => v.Value)
+                .SelectMany(v => v.As<List<IRelationship>>())
+                .DistinctBy(v => v.ElementId)
+                .Select(v =>
+                {
+                    var relationship = v.Properties.ToObject<TBranch>();
+                    _ = relationship.TrySetValue("Type", v.Type);
+                    var fromNode = ormNodes.First(n => n.ElementId == v.StartNodeElementId);
+                    _ = relationship.TrySetValue("FromId", dictNodes[fromNode].GetValue<Guid>("Id"));
+                    var toNode = ormNodes.First(n => n.ElementId == v.EndNodeElementId);
+                    _ = relationship.TrySetValue("ToId", dictNodes[toNode].GetValue<Guid>("Id"));
+                    return relationship;
+                });
+
+            return (nodes, relationships);
+        });
+
+        return new MatchByLabelResponse<TNode, TBranch>
+        {
+            Nodes = nodes.ToList(),
+            Relationships = relationships.ToList()
+        };
     }
 
     private static Dictionary<string, object?> GetProperties<TValue>(TValue value)

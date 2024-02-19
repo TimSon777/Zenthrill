@@ -49,7 +49,7 @@ public sealed class BranchCreator(
 {
     private readonly GraphDatabaseSettings _graphDatabaseSettings = graphDatabaseSettings.Value;
 
-    public async Task<OneOf<BranchId, ValidationFailure, Forbid, NotFound<StoryInfoId>, FragmentDoesNotExist>>CreateAsync(
+    public async Task<OneOf<BranchId, ValidationFailure, Forbid, NotFound<StoryInfoId>, FragmentDoesNotExist>> CreateAsync(
         CreateBranchRequest request,
         CancellationToken cancellationToken)
     {
