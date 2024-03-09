@@ -24,8 +24,8 @@ public sealed class StoryInfoConfiguration : IEntityTypeConfiguration<StoryInfo>
         builder
             .Property(storyInfo => storyInfo.EntrypointFragmentId)
             .HasConversion(
-                x => x.Value,
-                x => new FragmentId(x));
+                x => x == null ? null as Guid? : x.Value.Value,
+                x => x == null ? null : new FragmentId(x.Value));
 
         builder
             .Property(x => x.CreatorId)

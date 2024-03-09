@@ -10,6 +10,9 @@ public sealed class GraphDatabaseSettings : ISettings
     [ConfigurationKeyName("HOST")]
     public required Uri Host { get; set; }
 
+    [ConfigurationKeyName("URI")]
+    public required Uri Uri { get; set; }
+
     [ConfigurationKeyName("USERNAME")]
     public required string Username { get; set; }
 

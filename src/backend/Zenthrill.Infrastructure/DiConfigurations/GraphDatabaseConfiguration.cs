@@ -1,7 +1,13 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Neo4j.Driver;
-using Zenthrill.Application.Services;
+using Neo4jClient;
+using Zenthrill.Application;
+using Zenthrill.Application.Interfaces;
+using Zenthrill.Application.Repositories;
 using Zenthrill.Application.Settings;
+using Zenthrill.Infrastructure.GraphDatabase.Repositories;
+using Zenthrill.Infrastructure.Repositories;
+using Zenthrill.Infrastructure.Services;
 using Zenthrill.Settings.DependencyInjection;
 using GraphDatabase = Neo4j.Driver.GraphDatabase;
 
@@ -21,7 +27,24 @@ public static class GraphDatabaseConfiguration
             return GraphDatabase.Driver(settings.Host, credentials);
         });
 
-        builder.Services.AddSingleton<IGraphDatabase, Zenthrill.Infrastructure.Services.GraphDatabase>();
+        builder.Services.AddSingleton<BoltGraphClient>(sp =>
+        {
+            var settings = sp.GetOptions<GraphDatabaseSettings>();
+            var client = new BoltGraphClient(settings.Uri, settings.Username, settings.Password);
+            client.ConnectAsync().Wait();
+            return client;
+        });
+
+        builder.Services.AddSingleton<IGraphDbContext, GraphDbContext>();
+
+        builder.Services.AddSingleton<IRepositoryRegistry, RepositoryRegistry>();
+
+        builder.Services.AddSingleton<IFragmentRepository, FragmentRepository>();
+        builder.Services.AddSingleton<IStoryRepository, StoryRepository>();
+        builder.Services.AddSingleton<IBranchRepository, BranchRepository>();
+
+        builder.Services.AddSingleton<ILabelsConverter, LabelsConverter>();
+
         return builder;
     }
 }
