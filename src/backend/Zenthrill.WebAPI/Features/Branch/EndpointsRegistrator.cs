@@ -9,6 +9,9 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
         builder
             .MapPost("/branches", Create.Endpoint.Create);
 
+        builder
+            .MapPut("/branches", Update.Endpoint.Update);
+
         return builder;
     }
 }

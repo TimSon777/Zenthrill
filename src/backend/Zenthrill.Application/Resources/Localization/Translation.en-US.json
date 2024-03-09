@@ -1,0 +1,11 @@
+{
+  "ExampleStoryName": "Example Story",
+  "ExampleStoryEntrypointBody": "Start",
+  "ExampleStoryFragment1Body": "Fragment1",
+  "ExampleStoryFragment2Body": "Fragment2",
+  "ExampleStoryFragment3Body": "Fragment3",
+  "ExampleStoryBranchEntrypointToFragment1": "Branch 1",
+  "ExampleStoryBranchEntrypointToFragment2": "Branch 2",
+  "ExampleStoryBranchFragment1ToFragment3": "Branch 3",
+  "ExampleStoryBranchFragment2ToFragment3": "Branch 4"
+}

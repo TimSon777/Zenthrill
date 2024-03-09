@@ -1,5 +1,6 @@
 ﻿using Zenthrill.APIResponses;
-using Zenthrill.Application.Features.Story;
+using Zenthrill.Application.Features.Stories;
+using Zenthrill.Application.Features.Stories.Read;
 
 namespace Zenthrill.WebAPI.Features.Story.Read;
 

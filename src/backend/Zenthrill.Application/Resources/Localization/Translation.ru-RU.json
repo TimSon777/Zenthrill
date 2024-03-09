@@ -1,0 +1,11 @@
+{
+  "ExampleStoryName": "Пример истории",
+  "ExampleStoryEntrypointBody": "Привет, это пример истории. Выберите любое продолжение",
+  "ExampleStoryFragment1Body": "Отлично, вы очутились в первой части истории",
+  "ExampleStoryFragment2Body": "Отлично, вы очутились во второй части истории",
+  "ExampleStoryFragment3Body": "Это конец истории",
+  "ExampleStoryBranchEntrypointToFragment1": "Продолжение 1",
+  "ExampleStoryBranchEntrypointToFragment2": "Продолжение 2",
+  "ExampleStoryBranchFragment1ToFragment3": "Перейти в конец",
+  "ExampleStoryBranchFragment2ToFragment3": "Перейти в конец"
+}

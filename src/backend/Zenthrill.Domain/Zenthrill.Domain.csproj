@@ -9,6 +9,11 @@
     <ItemGroup>
       <PackageReference Include="OneOf" Version="3.0.263" />
       <PackageReference Include="StronglyTypedId" Version="1.0.0-beta07" />
+      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Specifications\Zenthrill.Specifications.csproj" />
     </ItemGroup>
 
 </Project>

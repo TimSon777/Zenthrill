@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
-using Zenthrill.Application.Features.Story;
+using Zenthrill.Application.Features.Stories;
+using Zenthrill.Application.Features.Stories.Create;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;

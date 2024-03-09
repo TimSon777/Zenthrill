@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Zenthrill.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,19 +7,31 @@ builder.AddGraphDatabaseConfiguration();
 builder.AddApplicationDbContextConfiguration();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.ConfigureHttpJsonOptions(o =>
+{
+    o.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(x => x.FullName));
 
 builder.Services.AddDateTimeOffsetProvider();
 builder.Services.AddFeaturesValidators();
-builder.Services.AddLabelsConstructor();
 builder.Services.AddWebApiMappers();
+builder.Services.AddLocalizerFactory();
 
 builder.Services
     .AddReadStoryFeature()
     .AddCreateStoryFeature()
+    .AddCreateExampleStoryFeature()
     .AddCreateBranchFeature()
-    .AddCreateFragmentFeature();
+    .AddUpdateBranchFeature()
+    .AddFragmentFeatures();
 
 var app = builder.Build();
 

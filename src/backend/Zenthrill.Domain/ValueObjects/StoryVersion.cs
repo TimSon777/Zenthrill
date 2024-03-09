@@ -16,6 +16,8 @@ public sealed record StoryVersion : ValueObject
     {
     }
 
+    public static readonly StoryVersion FirstVersion = Create(1, 0, "0").AsT0;
+
     public static OneOf<StoryVersion, MajorNegative, MinorNegative, SuffixEmpty> Create(int major, int minor, string suffix)
     {
         if (major < 0)

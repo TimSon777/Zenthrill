@@ -10,13 +10,14 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class DiConfiguration
 {
     public static IHostApplicationBuilder AddOutboxMessageConsumerConfiguration(
-        this IHostApplicationBuilder builder)
+        this IHostApplicationBuilder builder,
+        Assembly assembly)
     {
         builder.ConfigureSettings<OutboxConsumerSettings>();
 
         builder.Services.AddSingleton<IOutboxMessageConsumer, OutboxMessageConsumer>();
 
-        var handlers = Assembly.GetCallingAssembly().DefinedTypes
+        var handlers = assembly.DefinedTypes
             .Where(x => typeof(IOutboxMessageHandler).IsAssignableFrom(x)
                 && x is { IsInterface: false, IsAbstract: false });
 

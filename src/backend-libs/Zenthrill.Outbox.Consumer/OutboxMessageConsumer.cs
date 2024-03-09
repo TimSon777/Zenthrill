@@ -61,6 +61,10 @@ public sealed class OutboxMessageConsumer(
                     .GetRequiredService<IEnumerable<IOutboxMessageHandler>>()
                     .ToDictionary(h => h.GetOutboxMessageType(), h => h);
 
+                foreach (var handler1 in handlers)
+                {
+                    Console.WriteLine(handler1.Key);
+                }
                 var typeNameHeader = (byte[]) @event.BasicProperties.Headers!["$type"]!;
                 var typeName = Encoding.UTF8.GetString(typeNameHeader);
                 var type = Type.GetType(typeName)!;
@@ -77,6 +81,7 @@ public sealed class OutboxMessageConsumer(
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 // ReSharper disable once AccessToDisposedClosure
                 await channel.BasicNackAsync(
                     deliveryTag: @event.DeliveryTag,

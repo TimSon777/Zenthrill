@@ -1,5 +1,6 @@
 ﻿using Zenthrill.APIResponses;
-using Zenthrill.Application.Features.Fragment;
+using Zenthrill.Application.Features.Fragments;
+using Zenthrill.Application.Features.Fragments.Create;
 
 namespace Zenthrill.WebAPI.Features.Fragment.Create;
 

@@ -4,9 +4,7 @@ namespace Zenthrill.WebAPI.Features.Story.Read;
 
 public sealed class Response
 {
-    public required FragmentDto? Entrypoint { get; set; }
+    public required StoryInfoDto StoryInfo { get; set; }
 
-    public required List<FragmentDto> Fragments { get; set; }
-    
-    public required List<BranchDto> Branches { get; set; }
+    public required IEnumerable<ComponentDto> Components { get; set; }
 }

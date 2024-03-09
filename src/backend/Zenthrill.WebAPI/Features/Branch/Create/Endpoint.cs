@@ -1,5 +1,6 @@
 ﻿using Zenthrill.APIResponses;
-using Zenthrill.Application.Features.Branch;
+using Zenthrill.Application.Features.Branches;
+using Zenthrill.Application.Features.Branches.Create;
 
 namespace Zenthrill.WebAPI.Features.Branch.Create;
 
@@ -16,7 +17,7 @@ public static class Endpoint
         var result = await branchCreator.CreateAsync(createBranchRequest, cancellationToken);
 
         return result.Match<IResult>(
-            fragmentId => TypedResults.Ok(ApiResponses.Success(new Response { Id = fragmentId.Value })),
+            branchId => TypedResults.Ok(ApiResponses.Success(new Response { Id = branchId.Value })),
             validationFailure => TypedResults.BadRequest(ApiResponses.Failure(DefaultStatusCodes.BadRequest, validationFailure.Errors)),
             forbid => TypedResults.Forbid(),
             notFound => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFound.Id.Value)),

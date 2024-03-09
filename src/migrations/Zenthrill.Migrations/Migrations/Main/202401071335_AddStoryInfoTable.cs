@@ -17,6 +17,7 @@ public sealed class AddStoryInfoTable : ForwardOnlyMigration
                 .ForeignKey("Users", "Id")
             .WithColumn("EntrypointFragmentId")
                 .AsGuid()
+                .Nullable()
             .WithColumn("StoryName")
                 .AsString();
     }
