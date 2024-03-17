@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{06BC6F
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 		.env = .env
+		create-resources.sh = create-resources.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Outbox.Publisher", "src\backend-libs\Zenthrill.Outbox.Publisher\Zenthrill.Outbox.Publisher.csproj", "{8C4B1769-5E2D-4E20-98F3-D855E2BA736C}"
@@ -51,6 +52,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Specifications", "src\backend-libs\Zenthrill.Specifications\Zenthrill.Specifications.csproj", "{5A63E4A8-0B03-4823-8A51-789868CE261B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.APIResponses", "src\backend-libs\Zenthrill.APIResponses\Zenthrill.APIResponses.csproj", "{42E8E550-BDB9-4195-A6BE-BEB5E906364D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Benchmarks", "src\backend-benchmarks\Zenthrill.Benchmarks\Zenthrill.Benchmarks.csproj", "{28AFCBEE-5980-489C-92DC-3A5E866059F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{E0AF0503-151A-40B5-A2A8-C035F75E496E}"
+	ProjectSection(SolutionItems) = preProject
+		src\backend-benchmarks\docker-compose.yml = src\backend-benchmarks\docker-compose.yml
+		src\backend-benchmarks\sql-scripts\init.sql = src\backend-benchmarks\sql-scripts\init.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +139,10 @@ Global
 		{42E8E550-BDB9-4195-A6BE-BEB5E906364D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E8E550-BDB9-4195-A6BE-BEB5E906364D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E8E550-BDB9-4195-A6BE-BEB5E906364D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{493BE0CA-794F-44D1-B620-0E9B15EB0FD3} = {1563391C-C44C-4A1E-BECB-EE51FE578E45}
@@ -147,5 +160,6 @@ Global
 		{75F08E11-3ECE-4718-9FB0-76CBDA13DF26} = {C79A3CE9-FEFF-472D-9807-DD094C8C3537}
 		{5A63E4A8-0B03-4823-8A51-789868CE261B} = {508882D3-426F-4960-AA1B-05276735D646}
 		{42E8E550-BDB9-4195-A6BE-BEB5E906364D} = {508882D3-426F-4960-AA1B-05276735D646}
+		{28AFCBEE-5980-489C-92DC-3A5E866059F1} = {E0AF0503-151A-40B5-A2A8-C035F75E496E}
 	EndGlobalSection
 EndGlobal
