@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddGraphDatabaseConfiguration();
 builder.AddApplicationDbContextConfiguration();
+builder.AddS3Configuration();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureHttpJsonOptions(o =>
@@ -31,6 +32,7 @@ builder.Services
     .AddCreateExampleStoryFeature()
     .AddCreateBranchFeature()
     .AddUpdateBranchFeature()
+    .AddGetUploadFileLinkFeature()
     .AddFragmentFeatures();
 
 var app = builder.Build();

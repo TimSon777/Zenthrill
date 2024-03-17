@@ -1,5 +1,6 @@
 ﻿using Zenthrill.Application.Features.Branches.Create;
 using Zenthrill.Application.Features.Branches.Update;
+using Zenthrill.Application.Features.Files.GetUploadLink;
 using Zenthrill.Application.Features.Fragments.Create;
 using Zenthrill.Application.Features.Fragments.Update;
 using Zenthrill.Application.Features.Stories;
@@ -42,6 +43,11 @@ public static class FeaturesConfiguration
         return services.AddScoped<IBranchUpdater, BranchUpdater>();
     }
 
+    public static IServiceCollection AddGetUploadFileLinkFeature(this IServiceCollection services)
+    {
+        return services.AddScoped<IFileLinkUploadConstructor, FileLinkUploadConstructor>();
+    }
+    
     public static IServiceCollection AddFragmentFeatures(this IServiceCollection services)
     {
         return services

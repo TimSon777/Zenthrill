@@ -59,3 +59,20 @@ services:
       - REDIS_PASSWORD=${STORY_REDIS_PASSWORD}
     ports:
       - ${STORY_REDIS_EXTERNAL_PORT}:${STORY_REDIS_INTERNAL_PORT}
+
+  localstack:
+    container_name: localstack_main
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - EDGE_PORT=4566
+      - DATA_DIR=/tmp/localstack/data
+      - CLEAR_TMP_FOLDER=0
+    volumes:
+      - ./volumes/.localstack:/tmp/localstack
+      -  ./create-resources.sh:/etc/localstack/init/ready.d/create-resources.sh
