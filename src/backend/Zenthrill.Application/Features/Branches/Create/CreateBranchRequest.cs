@@ -4,7 +4,7 @@ namespace Zenthrill.Application.Features.Branches.Create;
 
 public sealed class CreateBranchRequest
 {
-    public required StoryInfoId StoryInfoId { get; init; }
+    public required StoryInfoVersionId StoryInfoVersionId { get; init; }
 
     public required FragmentId FromFragmentId { get; init; }
     

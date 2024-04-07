@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Migrations", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.DbMigrator", "src\migrations\Zenthrill.DbMigrator\Zenthrill.DbMigrator.csproj", "{493BE0CA-794F-44D1-B620-0E9B15EB0FD3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Auth.DbMigrator", "src\migrations\Zenthrill.Auth.DbMigrator\Zenthrill.Auth.DbMigrator.csproj", "{EAF77CF8-15BC-4AE5-B327-C1067B7621D1}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{1563391C-C44C-4A1E-BECB-EE51FE578E45}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{06BC6F9E-0B1A-42A9-AD58-0ED2AD78A141}"
@@ -19,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{06BC6F
 		docker-compose.yml = docker-compose.yml
 		.env = .env
 		create-resources.sh = create-resources.sh
+		Sql\init.sql = Sql\init.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Outbox.Publisher", "src\backend-libs\Zenthrill.Outbox.Publisher\Zenthrill.Outbox.Publisher.csproj", "{8C4B1769-5E2D-4E20-98F3-D855E2BA736C}"
@@ -43,8 +46,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Outbox", "Outbox", "{74B815
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Story.Consumer", "src\backend\Zenthrill.Story.Consumer\Zenthrill.Story.Consumer.csproj", "{716045AB-4828-492E-8A50-4BAB43B48290}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Story.OutboxPublisher", "src\backend\Zenthrill.Story.OutboxPublisher\Zenthrill.Story.OutboxPublisher.csproj", "{C64F5448-2602-4A29-8FCA-9CBE068D9EAE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Providers.DependencyInjection", "src\backend-libs\Zenthrill.Providers.DependencyInjection\Zenthrill.Providers.DependencyInjection.csproj", "{75F08E11-3ECE-4718-9FB0-76CBDA13DF26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{C79A3CE9-FEFF-472D-9807-DD094C8C3537}"
@@ -60,6 +61,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", 
 		src\backend-benchmarks\docker-compose.yml = src\backend-benchmarks\docker-compose.yml
 		src\backend-benchmarks\sql-scripts\init.sql = src\backend-benchmarks\sql-scripts\init.sql
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Auth.WebAPI", "src\backend\Zenthrill.Auth.WebAPI\Zenthrill.Auth.WebAPI.csproj", "{AF4CFBD1-8DCC-4CED-83E9-FC8E4693D615}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{D8AF6F6A-B02B-4F17-ADAF-1D21635409DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zenthrill.Auth.Model", "src\backend\Zenthrill.Auth.Model\Zenthrill.Auth.Model.csproj", "{6DF89CE1-B995-483A-9A13-2BA3596F7901}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,10 +130,6 @@ Global
 		{716045AB-4828-492E-8A50-4BAB43B48290}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{716045AB-4828-492E-8A50-4BAB43B48290}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{716045AB-4828-492E-8A50-4BAB43B48290}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C64F5448-2602-4A29-8FCA-9CBE068D9EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C64F5448-2602-4A29-8FCA-9CBE068D9EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C64F5448-2602-4A29-8FCA-9CBE068D9EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C64F5448-2602-4A29-8FCA-9CBE068D9EAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75F08E11-3ECE-4718-9FB0-76CBDA13DF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75F08E11-3ECE-4718-9FB0-76CBDA13DF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75F08E11-3ECE-4718-9FB0-76CBDA13DF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -143,6 +146,18 @@ Global
 		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28AFCBEE-5980-489C-92DC-3A5E866059F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF4CFBD1-8DCC-4CED-83E9-FC8E4693D615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF4CFBD1-8DCC-4CED-83E9-FC8E4693D615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF4CFBD1-8DCC-4CED-83E9-FC8E4693D615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF4CFBD1-8DCC-4CED-83E9-FC8E4693D615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF89CE1-B995-483A-9A13-2BA3596F7901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF89CE1-B995-483A-9A13-2BA3596F7901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF89CE1-B995-483A-9A13-2BA3596F7901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF89CE1-B995-483A-9A13-2BA3596F7901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF77CF8-15BC-4AE5-B327-C1067B7621D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF77CF8-15BC-4AE5-B327-C1067B7621D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF77CF8-15BC-4AE5-B327-C1067B7621D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF77CF8-15BC-4AE5-B327-C1067B7621D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{493BE0CA-794F-44D1-B620-0E9B15EB0FD3} = {1563391C-C44C-4A1E-BECB-EE51FE578E45}
@@ -161,5 +176,8 @@ Global
 		{5A63E4A8-0B03-4823-8A51-789868CE261B} = {508882D3-426F-4960-AA1B-05276735D646}
 		{42E8E550-BDB9-4195-A6BE-BEB5E906364D} = {508882D3-426F-4960-AA1B-05276735D646}
 		{28AFCBEE-5980-489C-92DC-3A5E866059F1} = {E0AF0503-151A-40B5-A2A8-C035F75E496E}
+		{AF4CFBD1-8DCC-4CED-83E9-FC8E4693D615} = {D8AF6F6A-B02B-4F17-ADAF-1D21635409DB}
+		{6DF89CE1-B995-483A-9A13-2BA3596F7901} = {D8AF6F6A-B02B-4F17-ADAF-1D21635409DB}
+		{EAF77CF8-15BC-4AE5-B327-C1067B7621D1} = {1563391C-C44C-4A1E-BECB-EE51FE578E45}
 	EndGlobalSection
 EndGlobal

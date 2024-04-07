@@ -18,13 +18,12 @@ var configuration = new ConfigurationBuilder()
 var connectionString = configuration["DATABASE_CONNECTION_STRING"]
     ?? throw new InvalidOperationException("DATABASE_CONNECTION_STRING doesn't set");
 
-Console.WriteLine(connectionString);
 var serviceProvider = new ServiceCollection()
     .AddFluentMigratorCore()
     .ConfigureRunner(rb => rb
         .AddPostgres()
         .WithGlobalConnectionString(connectionString)
-        .ScanIn(typeof(AddUserTable).Assembly).For.Migrations())
+        .ScanIn(typeof(AddStoryTables).Assembly).For.Migrations())
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider();
 

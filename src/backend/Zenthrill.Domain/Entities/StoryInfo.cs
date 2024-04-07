@@ -10,15 +10,11 @@ public partial struct StoryInfoId;
 
 public sealed class StoryInfo : Entity<StoryInfoId>
 {
-    public required string StoryName { get; set; }
-
-    public required FragmentId? EntrypointFragmentId { get; set; }
-
-    public required StoryVersion Version { get; set; }
-
     public UserId CreatorId { get; set; }
-    
-    public User Creator { get; set; } = default!;
+
+    public ICollection<StoryInfoVersion> Versions { get; set; } = default!;
+
+    public required string Description { get; set; }
 
     public StoryInfo()
     {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Zenthrill.Application.Results;
-using Zenthrill.Application.Specs;
+using Zenthrill.Domain.Entities;
 
 namespace Zenthrill.Application.Features.Branches.Update;
 
@@ -24,20 +24,26 @@ public sealed class BranchUpdater(
         return await graphDbContext.ExecuteAsync<UpdateBranchOneOf>(
             async (repositoryRegistry, ct) =>
             {
-                var storyInfo = await applicationDbContext.StoryInfos
-                    .Include(storyInfo => storyInfo.Creator)
-                    .FirstOrDefaultAsync(StoryInfoSpecs.ById(request.StoryInfoId), ct);
+                var storyInfoVersion = await applicationDbContext.StoryInfoVersions
+                    .Include(siv => siv.StoryInfo)
+                    .Include(siv => siv.SubVersions)
+                    .FirstOrDefaultAsync(StoryInfoVersion.ById(request.StoryInfoVersionId), ct);
 
-                if (storyInfo is null)
+                if (storyInfoVersion is null)
                 {
-                    return NotFound.ById(request.StoryInfoId);
+                    return NotFound.ById(request.StoryInfoVersionId);
                 }
 
-                var hasAccess = request.User.HasAccessToUpdate(storyInfo);
+                var hasAccess = request.User.HasAccessToUpdate(storyInfoVersion.StoryInfo);
 
                 if (!hasAccess)
                 {
                     return new Forbid();
+                }
+
+                if (storyInfoVersion.IsBaseVersion)
+                {
+                    return new ForbidEditBaseVersion();
                 }
 
                 var result = await validator.ValidateAsync(request, cancellationToken);
@@ -48,7 +54,7 @@ public sealed class BranchUpdater(
                 }
 
                 var branch = await repositoryRegistry.BranchRepository
-                    .TryGetAsync(request.BranchId, request.StoryInfoId, ct);
+                    .TryGetAsync(request.BranchId, request.StoryInfoVersionId, ct);
 
                 if (branch is null)
                 {
@@ -58,7 +64,7 @@ public sealed class BranchUpdater(
                 branch.Inscription = request.Inscription;
 
                 await repositoryRegistry.BranchRepository
-                    .UpdateAsync(branch, storyInfo.Id);
+                    .UpdateAsync(branch, storyInfoVersion.Id);
 
                 return branch.Id;
             },

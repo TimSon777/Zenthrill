@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-Zenthrill.Story.Consumer-64474FDF-BC1B-4C9B-A1EA-EB7F78D35886</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +15,12 @@
     <ItemGroup>
       <ProjectReference Include="..\..\backend-libs\Zenthrill.Outbox.Consumer\Zenthrill.Outbox.Consumer.csproj" />
       <ProjectReference Include="..\Zenthrill.Infrastructure\Zenthrill.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

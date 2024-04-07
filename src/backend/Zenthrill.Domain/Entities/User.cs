@@ -8,7 +8,9 @@ public partial struct UserId;
 
 public sealed class User : Entity<UserId>
 {
-    public required string Nickname { get; set; }
+    public required string UserName { get; set; }
+
+    public required IReadOnlyCollection<string> Roles { get; set; }
 
     public User()
     {
@@ -22,6 +24,6 @@ public sealed class User : Entity<UserId>
 
     public bool HasAccessToUpdate(StoryInfo storyInfo)
     {
-        return this == storyInfo.Creator;
+        return Id == storyInfo.CreatorId;
     }
 }

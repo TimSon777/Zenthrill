@@ -11,9 +11,9 @@ public sealed class FragmentRepository(
     BoltGraphClient boltGraphClient,
     ILabelsConverter labelsConverter) : IFragmentRepository
 {
-    public async Task<Fragment?> TryGetAsync(FragmentId fragmentId, StoryInfoId storyInfoId, CancellationToken ct)
+    public async Task<Fragment?> TryGetAsync(FragmentId fragmentId, StoryInfoVersionId storyInfoVersionId, CancellationToken ct)
     {
-        var label = labelsConverter.Convert(storyInfoId);
+        var label = labelsConverter.Convert(storyInfoVersionId);
             
         var results = await boltGraphClient.Cypher
             .Match($"(fragment:{label})")
@@ -35,9 +35,9 @@ public sealed class FragmentRepository(
         };
     }
 
-    public async Task CreateAsync(Fragment fragment, StoryInfoId storyInfoId)
+    public async Task CreateAsync(Fragment fragment, StoryInfoVersionId storyInfoVersionId)
     {
-        var label = labelsConverter.Convert(storyInfoId);
+        var label = labelsConverter.Convert(storyInfoVersionId);
 
         var fragmentId = fragment.Id.Value.ToString();
 
@@ -55,9 +55,9 @@ public sealed class FragmentRepository(
             .ExecuteWithoutResultsAsync();
     }
 
-    public async Task UpdateAsync(Fragment fragment, StoryInfoId storyInfoId)
+    public async Task UpdateAsync(Fragment fragment, StoryInfoVersionId storyInfoVersionId)
     {
-        var label = labelsConverter.Convert(storyInfoId);
+        var label = labelsConverter.Convert(storyInfoVersionId);
 
         var fragmentId = fragment.Id.Value.ToString();
 

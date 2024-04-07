@@ -4,5 +4,5 @@ namespace Zenthrill.Application.Interfaces;
 
 public interface ILabelsConverter
 {
-    string Convert(StoryInfoId storyInfoId);
+    string Convert(StoryInfoVersionId storyInfoVersionId);
 }

@@ -13,5 +13,7 @@ public interface IApplicationDbContext
     
     DbSet<OutboxMessage> OutboxMessages { get; }
 
+    DbSet<StoryInfoVersion> StoryInfoVersions { get; }
+
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

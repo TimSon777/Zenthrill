@@ -1,71 +1,69 @@
-﻿using Zenthrill.Application.Features.Stories.Create;
-using Zenthrill.Application.Features.Stories.ExampleCreate;
-using Zenthrill.Application.Features.Stories.Read;
-using Zenthrill.WebAPI.Features.Story.Read.Objects;
+﻿using System.Security.Claims;
+using Zenthrill.Application.Features.Stories.Create;
+using Zenthrill.Application.Features.Stories.CreateVersion;
+using Zenthrill.Application.Features.Stories.CreateVersion.Objects;
+using Zenthrill.Application.Features.Stories.ExampleVersionCreate;
+using Zenthrill.Application.Features.Stories.ReadVersion;
+using Zenthrill.WebAPI.Common;
+using Zenthrill.WebAPI.Features.Story.ExampleVersionCreate;
+using Zenthrill.WebAPI.Features.Story.ReadVersion.Objects;
+using Response = Zenthrill.WebAPI.Features.Story.ReadVersion.Response;
 
 namespace Zenthrill.WebAPI.Features.Story;
 
 public interface IMapper
 {
-    ExampleStoryCreateRequest MapToApplicationRequest(ExampleCreate.Request request);
+    ExampleStoryVersionCreateRequest MapToApplicationRequest(Request request, ClaimsPrincipal user);
 
-    CreateStoryRequest MapToApplicationRequest(Create.Request request);
+    CreateStoryRequest MapToApplicationRequest(Create.Request request, ClaimsPrincipal user);
     
-    ReadStoryRequest MapToApplicationRequest(Read.Request request);
+    ReadStoryVersionRequest MapToApplicationRequest(ReadVersion.Request request, ClaimsPrincipal user);
 
-    Read.Response MapFromApplicationResponse(Domain.Aggregates.Story story);
+    CreateStoryVersionRequest MapToApplicationRequest(CreateVersion.Request request, ClaimsPrincipal user);
+
+    Response MapFromApplicationResponse(Domain.Aggregates.Story story);
 }
 
-public sealed class Mapper : IMapper
+public sealed class Mapper(IUserMapper userMapper) : IMapper
 {
-    public ExampleStoryCreateRequest MapToApplicationRequest(ExampleCreate.Request request)
+    public ExampleStoryVersionCreateRequest MapToApplicationRequest(Request request, ClaimsPrincipal user)
     {
-        return new ExampleStoryCreateRequest
+        return new ExampleStoryVersionCreateRequest
         {
             Locale = request.Locale,
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId(new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6"))
-            }
+            StoryInfoId = new StoryInfoId(request.StoryInfoId),
+            User = userMapper.MapToApplicationUser(user)
         };
     }
 
-    public CreateStoryRequest MapToApplicationRequest(Create.Request request)
+    public CreateStoryRequest MapToApplicationRequest(Create.Request request, ClaimsPrincipal user)
     {
         return new CreateStoryRequest
         {
-            Name = request.Name,
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId(new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6"))
-            }
+            Description = request.Name,
+            User = userMapper.MapToApplicationUser(user)
         };
     }
 
-    public ReadStoryRequest MapToApplicationRequest(Read.Request request)
+    public ReadStoryVersionRequest MapToApplicationRequest(ReadVersion.Request request, ClaimsPrincipal user)
     {
-        return new ReadStoryRequest
+        return new ReadStoryVersionRequest
         {
-            StoryInfoId = new StoryInfoId(request.Id),
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId(new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6"))
-            }
+            StoryInfoVersionId = new StoryInfoVersionId(request.Id),
+            User = userMapper.MapToApplicationUser(user)
         };
     }
     
-    public Read.Response MapFromApplicationResponse(Domain.Aggregates.Story story)
+    public Response MapFromApplicationResponse(Domain.Aggregates.Story story)
     {
-        return new Read.Response
+        return new Response
         {
             StoryInfo = new StoryInfoDto
             {
-                Id = story.StoryInfo.Id.Value,
-                Name = story.StoryInfo.StoryName
+                Id = story.StoryInfoVersion.Id.Value,
+                Description = story.StoryInfoVersion.StoryInfo.Description
             },
+            Name = story.StoryInfoVersion.Name,
             Components = story.Components.Select(c => new ComponentDto
             {
                 Branches = c.TraverseBranches().Select(MapToBranchDto),
@@ -74,6 +72,23 @@ public sealed class Mapper : IMapper
         };
     }
 
+    public CreateStoryVersionRequest MapToApplicationRequest(CreateVersion.Request request,
+        ClaimsPrincipal user)
+    {
+        return new CreateStoryVersionRequest
+        {
+            BaseStoryInfoVersionId = new StoryInfoVersionId(request.BaseStoryInfoVersionId),
+            Name = request.Name,
+            User = userMapper.MapToApplicationUser(user),
+            Version = new StoryVersionDto
+            {
+                Major = request.Version.Major,
+                Minor = request.Version.Minor,
+                Suffix = request.Version.Suffix
+            }
+        };
+    }
+  
     private static FragmentDto MapToFragmentDto(Domain.Entities.Fragment fragment)
     {
         return new FragmentDto

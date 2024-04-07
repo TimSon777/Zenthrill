@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddGraphDatabaseConfiguration();
 builder.AddApplicationDbContextConfiguration();
 builder.AddS3Configuration();
+builder.AddAuthorizationConfiguration();
+builder.AddIdentityProviderClientConfiguration();
+builder.AddBackgroundServices();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureHttpJsonOptions(o =>
@@ -33,10 +36,14 @@ builder.Services
     .AddCreateBranchFeature()
     .AddUpdateBranchFeature()
     .AddGetUploadFileLinkFeature()
-    .AddFragmentFeatures();
+    .AddFragmentFeatures()
+    .AddFragmentFeatures()
+    .AddFeatures();
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseApi(typeof(Zenthrill.WebAPI.AssemblyInfo).Assembly);
 
 app.UseSwagger();

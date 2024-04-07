@@ -9,11 +9,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageReference Include="OpenIddict.AspNetCore" Version="5.3.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\backend-libs\Zenthrill.APIResponses\Zenthrill.APIResponses.csproj" />
+      <ProjectReference Include="..\..\backend-libs\Zenthrill.Outbox.Publisher\Zenthrill.Outbox.Publisher.csproj" />
       <ProjectReference Include="..\Zenthrill.Infrastructure\Zenthrill.Infrastructure.csproj" />
     </ItemGroup>
     

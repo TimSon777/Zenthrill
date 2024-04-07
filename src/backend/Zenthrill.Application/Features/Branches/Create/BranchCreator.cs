@@ -25,20 +25,26 @@ public sealed class BranchCreator(
         return await graphDbContext.ExecuteAsync<CreateBranchOneOf>(
             async (repositoryRegistry, ct) =>
             {
-                var storyInfo = await applicationDbContext.StoryInfos
-                    .Include(storyInfo => storyInfo.Creator)
-                    .FirstOrDefaultAsync(StoryInfoSpecs.ById(request.StoryInfoId), ct);
+                var storyInfoVersion = await applicationDbContext.StoryInfoVersions
+                    .Include(siv => siv.StoryInfo)
+                    .Include(siv => siv.SubVersions)
+                    .FirstOrDefaultAsync(StoryInfoVersion.ById(request.StoryInfoVersionId), ct);
 
-                if (storyInfo is null)
+                if (storyInfoVersion is null)
                 {
-                    return NotFound.ById(request.StoryInfoId);
+                    return NotFound.ById(request.StoryInfoVersionId);
                 }
 
-                var hasAccess = request.User.HasAccessToUpdate(storyInfo);
+                var hasAccess = request.User.HasAccessToUpdate(storyInfoVersion.StoryInfo);
 
                 if (!hasAccess)
                 {
                     return new Forbid();
+                }
+
+                if (storyInfoVersion.IsBaseVersion)
+                {
+                    return new ForbidEditBaseVersion();
                 }
 
                 var result = await validator.ValidateAsync(request, cancellationToken);
@@ -49,10 +55,10 @@ public sealed class BranchCreator(
                 }
 
                 var fromFragment = await repositoryRegistry.FragmentRepository
-                    .TryGetAsync(request.FromFragmentId, storyInfo.Id, ct);
+                    .TryGetAsync(request.FromFragmentId, storyInfoVersion.Id, ct);
 
                 var toFragment = await repositoryRegistry.FragmentRepository
-                    .TryGetAsync(request.ToFragmentId, storyInfo.Id, ct);
+                    .TryGetAsync(request.ToFragmentId, storyInfoVersion.Id, ct);
 
                 if (fromFragment is null || toFragment is null)
                 {
@@ -65,7 +71,7 @@ public sealed class BranchCreator(
                 };
                 
                 await repositoryRegistry.BranchRepository
-                    .CreateAsync(branch, storyInfo.Id);
+                    .CreateAsync(branch, storyInfoVersion.Id);
 
                 return branch.Id;
             },

@@ -18,7 +18,6 @@ public sealed class FileLinkUploadConstructor(
     public async Task<GetUploadLinkOneOf> GetUploadLinkAsync(GetUploadLinkRequest request, CancellationToken cancellationToken)
     {
         var storyInfo = await applicationDbContext.StoryInfos
-            .Include(si => si.Creator)
             .FirstOrDefaultAsync(si => si.Id == request.StoryInfoId, cancellationToken);
 
         if (storyInfo is null)

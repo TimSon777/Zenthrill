@@ -6,7 +6,7 @@ public sealed class CreateStoryRequestValidator : AbstractValidator<CreateStoryR
 {
     public CreateStoryRequestValidator()
     {
-        RuleFor(r => r.Name)
+        RuleFor(r => r.Description)
             .Length(0, 100);
     }
 }

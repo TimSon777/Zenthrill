@@ -1,5 +1,5 @@
 using TypesafeLocalization;
-using Zenthrill.Application.Features.Stories.ExampleCreate;
+using Zenthrill.Application.Features.Stories.ExampleVersionCreate;
 using Zenthrill.Domain.Entities;
 using Zenthrill.Outbox.Core;
 
@@ -7,7 +7,7 @@ namespace Zenthrill.Application.Outbox;
 
 public sealed class CreateExampleStoryOutboxMessage : IOutboxMessage
 {
-    public required Guid StoryInfoId { get; set; }
+    public required Guid StoryInfoVersionId { get; set; }
 
     public required Locale Locale { get; set; }
 }
@@ -17,10 +17,10 @@ public sealed class CreateExampleStoryOutboxMessageHandler(IExampleStoryCreatorC
 {
     protected override async Task Handle(CreateExampleStoryOutboxMessage message)
     {
-        var request = new ExampleStoryCreateCallbackRequest
+        var request = new ExampleStoryVersionCreateCallbackRequest
         {
             Locale = message.Locale,
-            StoryInfoId = new StoryInfoId(message.StoryInfoId)
+            StoryInfoVersionId = new StoryInfoVersionId(message.StoryInfoVersionId)
         };
 
         await exampleStoryCreatorCallback.CreateCallbackAsync(request, CancellationToken.None);

@@ -21,16 +21,22 @@ public sealed class FragmentUpdater(
     {
         return await graphDbContext.ExecuteAsync<UpdateFragmentOneOf>(async (repositoryRegistry, ct) =>
         {
-            var storyInfo = await applicationDbContext.StoryInfos
-                .Include(si => si.Creator)
-                .FirstOrDefaultAsync(StoryInfo.ById(request.StoryInfoId), cancellationToken);
+            var storyInfoVersion = await applicationDbContext.StoryInfoVersions
+                .Include(siv => siv.StoryInfo)
+                .Include(siv => siv.SubVersions)
+                .FirstOrDefaultAsync(StoryInfoVersion.ById(request.StoryInfoVersionId), cancellationToken);
 
-            if (storyInfo is null)
+            if (storyInfoVersion is null)
             {
-                return NotFound.ById(request.StoryInfoId);
+                return NotFound.ById(request.StoryInfoVersionId);
             }
-
-            if (!request.User.HasAccessToUpdate(storyInfo))
+            
+            if (storyInfoVersion.IsBaseVersion)
+            {
+                return new ForbidEditBaseVersion();
+            }
+ 
+            if (!request.User.HasAccessToUpdate(storyInfoVersion.StoryInfo))
             {
                 return new Forbid();
             }
@@ -43,7 +49,7 @@ public sealed class FragmentUpdater(
             }
 
             var fragment = await repositoryRegistry.FragmentRepository
-                .TryGetAsync(request.FragmentId, storyInfo.Id, ct);
+                .TryGetAsync(request.FragmentId, storyInfoVersion.Id, ct);
 
             if (fragment is null)
             {
@@ -53,7 +59,7 @@ public sealed class FragmentUpdater(
             fragment.Body = request.Body;
 
             await repositoryRegistry.FragmentRepository
-                .UpdateAsync(fragment, storyInfo.Id);
+                .UpdateAsync(fragment, storyInfoVersion.Id);
 
             return new Success();
         }, cancellationToken);

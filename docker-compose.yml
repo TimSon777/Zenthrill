@@ -1,7 +1,7 @@
 version: 2.23.3
 
 services:
-  graph_database:
+  graph_db:
     image: neo4j:enterprise
     ports:
       - ${GRAPH_DATABASE_EXTERNAL_PORT}:${GRAPH_DATABASE_INTERNAL_PORT}
@@ -15,33 +15,58 @@ services:
       - ./volumes/graph_database:/var/lib/neo4j/import \
       - ./volumes/graph_database:/plugins \
 
-  main_database:
+  db:
     image: postgres:latest
     ports:
-      - ${MAIN_DATABASE_EXTERNAL_PORT}:${MAIN_DATABASE_INTERNAL_PORT}
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
     environment:
-      - POSTGRES_PASSWORD=${MAIN_DATABASE_PASSWORD}
-      - POSTGRES_USER=${MAIN_DATABASE_USER}
-      - POSTGRES_DB=${MAIN_DATABASE_NAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
     volumes:
       - ./volumes/main_database:/var/lib/postgresql
+      - ./Sql:/docker-entrypoint-initdb.d
+
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
   
-  main_migrator:
+  story_migrator:
     build:
       context: ./src/migrations
       dockerfile: ./Zenthrill.DbMigrator/Dockerfile
     depends_on: 
-      main_database:
+      db:
         condition: service_healthy
     restart: on-failure
     environment:
       - DOTNET_ENVIRONMENT=${ENVIRONMENT}
-      - DATABASE_CONNECTION_STRING=Host=main_database;Port=${MAIN_DATABASE_INTERNAL_PORT};User ID=${MAIN_DATABASE_USER};Password=${MAIN_DATABASE_PASSWORD};Database=${MAIN_DATABASE_NAME}
+      - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${STORY_DB_NAME}
+
+  auth_migrator:
+    build:
+      context: ./src
+      dockerfile: ./migrations/Zenthrill.Auth.DbMigrator/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - DOTNET_ENVIRONMENT=${ENVIRONMENT}
+      - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${AUTH_DB_NAME}
+
+  identity_provider:
+    build:
+      context: ./src/backend
+      dockerfile: ./Zenthrill.Auth.WebAPI/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - DOTNET_ENVIRONMENT=${ENVIRONMENT}
+      - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${AUTH_DB_NAME}
 
   story_broker:
     image: rabbitmq:3.10.7-management
