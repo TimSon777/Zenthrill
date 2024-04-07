@@ -5,8 +5,8 @@ namespace Zenthrill.Infrastructure.Services;
 
 public sealed class LabelsConverter : ILabelsConverter
 {
-    public string Convert(StoryInfoId storyInfoId)
+    public string Convert(StoryInfoVersionId storyInfoVersionId)
     {
-        return $"story{storyInfoId.Value:N}";
+        return $"story{storyInfoVersionId.Value:N}";
     }
 }

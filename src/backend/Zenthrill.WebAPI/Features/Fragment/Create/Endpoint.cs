@@ -1,5 +1,5 @@
-﻿using Zenthrill.APIResponses;
-using Zenthrill.Application.Features.Fragments;
+﻿using Microsoft.AspNetCore.Mvc;
+using Zenthrill.APIResponses;
 using Zenthrill.Application.Features.Fragments.Create;
 
 namespace Zenthrill.WebAPI.Features.Fragment.Create;
@@ -7,12 +7,13 @@ namespace Zenthrill.WebAPI.Features.Fragment.Create;
 public static class Endpoint
 {
     public static async Task<IResult> Create(
-        Request request,
+        [FromBody] Request request,
         IFragmentCreator fragmentCreator,
         IMapper mapper,
+        HttpContext httpContext,
         CancellationToken cancellationToken)
     {
-        var createStoryRequest = mapper.MapToApplicationRequest(request);
+        var createStoryRequest = mapper.MapToApplicationRequest(request, httpContext.User);
 
         var result = await fragmentCreator.CreateAsync(createStoryRequest, cancellationToken);
 
@@ -20,6 +21,7 @@ public static class Endpoint
             fragmentId => TypedResults.Ok(ApiResponses.Success(fragmentId.Value)),
             validationFailure => TypedResults.BadRequest(ApiResponses.Failure(DefaultStatusCodes.BadRequest, validationFailure.Errors)),
             forbid => TypedResults.Forbid(),
-            notFound => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFound.Id)));
+            notFound => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFound.Id)),
+            forbidEditBaseVersion => TypedResults.UnprocessableEntity(ApiResponses.Failure(StatusCodes.ForbidEditBaseVersion)));
     }
 }

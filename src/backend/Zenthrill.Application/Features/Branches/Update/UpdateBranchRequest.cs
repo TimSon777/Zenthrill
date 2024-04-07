@@ -4,7 +4,7 @@ namespace Zenthrill.Application.Features.Branches.Update;
 
 public sealed class UpdateBranchRequest
 {
-    public required StoryInfoId StoryInfoId { get; init; }
+    public required StoryInfoVersionId StoryInfoVersionId { get; init; }
 
     public required BranchId BranchId { get; set; }
 

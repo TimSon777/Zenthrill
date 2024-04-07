@@ -1,46 +1,39 @@
-﻿using Zenthrill.Application.Features.Branches.Create;
+﻿using System.Security.Claims;
+using Zenthrill.Application.Features.Branches.Create;
 using Zenthrill.Application.Features.Branches.Update;
-using Zenthrill.WebAPI.Features.Branch.Update;
+using Zenthrill.WebAPI.Common;
 
 namespace Zenthrill.WebAPI.Features.Branch;
 
 public interface IMapper
 {
-    CreateBranchRequest MapToApplicationRequest(Create.Request request);
+    CreateBranchRequest MapToApplicationRequest(Create.Request request, ClaimsPrincipal principal);
     
-    UpdateBranchRequest MapToApplicationRequest(Update.Request request);
+    UpdateBranchRequest MapToApplicationRequest(Update.Request request, ClaimsPrincipal principal);
 }
 
-public sealed class Mapper : IMapper
+public sealed class Mapper(IUserMapper userMapper) : IMapper
 {
-    public CreateBranchRequest MapToApplicationRequest(Create.Request request)
+    public CreateBranchRequest MapToApplicationRequest(Create.Request request, ClaimsPrincipal principal)
     {
         return new CreateBranchRequest
         {
             Inscription = request.Inscription,
-            StoryInfoId = new StoryInfoId(request.StoryInfoId),
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId(new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6"))
-            },
+            StoryInfoVersionId = new StoryInfoVersionId(request.StoryInfoVersionId),
+            User = userMapper.MapToApplicationUser(principal),
             FromFragmentId = new FragmentId(request.FromFragmentId),
             ToFragmentId = new FragmentId(request.ToFragmentId)
         };
     }
 
-    public UpdateBranchRequest MapToApplicationRequest(Request request)
+    public UpdateBranchRequest MapToApplicationRequest(Update.Request request, ClaimsPrincipal principal)
     {
         return new UpdateBranchRequest
         {
             BranchId = new BranchId(request.BranchId),
             Inscription = request.Inscription,
-            StoryInfoId = new StoryInfoId(request.StoryInfoId),
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId(new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6"))
-            }
+            StoryInfoVersionId = new StoryInfoVersionId(request.StoryInfoVersionId),
+            User = userMapper.MapToApplicationUser(principal)
         };
     }
 }

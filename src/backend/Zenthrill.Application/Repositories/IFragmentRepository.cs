@@ -4,9 +4,9 @@ namespace Zenthrill.Application.Repositories;
 
 public interface IFragmentRepository
 {
-    Task<Fragment?> TryGetAsync(FragmentId fragmentId, StoryInfoId storyInfoId, CancellationToken ct);
+    Task<Fragment?> TryGetAsync(FragmentId fragmentId, StoryInfoVersionId storyInfoVersionId, CancellationToken ct);
 
-    Task CreateAsync(Fragment fragment, StoryInfoId storyInfoId);
+    Task CreateAsync(Fragment fragment, StoryInfoVersionId storyInfoVersionId);
 
-    Task UpdateAsync(Fragment fragment, StoryInfoId storyInfoId);
+    Task UpdateAsync(Fragment fragment, StoryInfoVersionId storyInfoVersionId);
 }

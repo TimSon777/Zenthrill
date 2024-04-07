@@ -11,9 +11,9 @@ public sealed class BranchRepository(
     BoltGraphClient boltGraphClient,
     ILabelsConverter labelsConverter) : IBranchRepository
 {
-    public async Task<Branch?> TryGetAsync(BranchId branchId, StoryInfoId storyInfoId, CancellationToken ct)
+    public async Task<Branch?> TryGetAsync(BranchId branchId, StoryInfoVersionId storyInfoVersionId, CancellationToken ct)
     {
-        var label = labelsConverter.Convert(storyInfoId);
+        var label = labelsConverter.Convert(storyInfoVersionId);
             
         var results = await boltGraphClient.Cypher
             .Match($"(fromFragment:{label})-[branch:TRANSITION_TO]-(toFragment:{label})")
@@ -33,9 +33,9 @@ public sealed class BranchRepository(
             ?.MapToBranch();
     }
     
-    public async Task CreateAsync(Branch branch, StoryInfoId storyInfoId)
+    public async Task CreateAsync(Branch branch, StoryInfoVersionId storyInfoVersionId)
     {
-        var label = labelsConverter.Convert(storyInfoId);
+        var label = labelsConverter.Convert(storyInfoVersionId);
 
         var branchDto = new BranchDto
         {
@@ -73,7 +73,7 @@ public sealed class BranchRepository(
             .ExecuteWithoutResultsAsync();
     }
     
-    public async Task UpdateAsync(Branch branch, StoryInfoId storyInfoId)
+    public async Task UpdateAsync(Branch branch, StoryInfoVersionId storyInfoVersionId)
     {
         var branchDto = new BranchDto
         {

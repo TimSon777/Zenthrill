@@ -21,9 +21,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<User> Users => Set<User>();
 
     public DbSet<StoryInfo> StoryInfos => Set<StoryInfo>();
-    
+
+    public DbSet<StoryInfoVersion> StoryInfoVersions => Set<StoryInfoVersion>();
+
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
-    
+
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         await base.SaveChangesAsync(cancellationToken);

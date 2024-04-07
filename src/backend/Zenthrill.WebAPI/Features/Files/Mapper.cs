@@ -1,25 +1,23 @@
+using System.Security.Claims;
 using Zenthrill.Application.Features.Files.GetUploadLink;
+using Zenthrill.WebAPI.Common;
 
 namespace Zenthrill.WebAPI.Features.Files;
 
 public interface IMapper
 {
-    GetUploadLinkRequest MapToApplicationRequest(GetUploadLink.Request request);
+    GetUploadLinkRequest MapToApplicationRequest(GetUploadLink.Request request, ClaimsPrincipal principal);
 }
 
-public sealed class Mapper : IMapper
+public sealed class Mapper(IUserMapper userMapper) : IMapper
 {
-    public GetUploadLinkRequest MapToApplicationRequest(GetUploadLink.Request request)
+    public GetUploadLinkRequest MapToApplicationRequest(GetUploadLink.Request request, ClaimsPrincipal principal)
     {
         return new GetUploadLinkRequest
         {
             Extension = request.Extension,
             StoryInfoId = new StoryInfoId(request.StoryInfoId),
-            User = new User
-            {
-                Nickname = "Test",
-                Id = new UserId(new Guid("cffc1c0c-3a86-42dc-94c0-5e9a0c6ab5a6"))
-            }
+            User = userMapper.MapToApplicationUser(principal)
         };
     }
 }

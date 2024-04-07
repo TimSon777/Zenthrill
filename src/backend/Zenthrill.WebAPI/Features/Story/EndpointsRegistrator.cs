@@ -1,4 +1,5 @@
 ﻿using Zenthrill.WebAPI.Common;
+using Endpoint = Zenthrill.WebAPI.Features.Story.ExampleVersionCreate.Endpoint;
 
 namespace Zenthrill.WebAPI.Features.Story;
 
@@ -7,13 +8,20 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
     public IEndpointRouteBuilder Register(IEndpointRouteBuilder builder)
     {
         builder
-            .MapGet("/stories", Read.Endpoint.Read);
+            .MapGet("/story-versions", ReadVersion.Endpoint.ReadVersion)
+            .RequireAuthorization();
         
         builder
-            .MapPost("/stories", Create.Endpoint.Create);
+            .MapPost("/stories", Create.Endpoint.Create)
+            .RequireAuthorization();;
 
         builder
-            .MapPost("/stories/example", ExampleCreate.Endpoint.CreateExample);
+            .MapPost("/story-versions/example", Endpoint.CreateExampleVersion)
+            .RequireAuthorization();
+
+        builder
+            .MapPost("/story-versions", CreateVersion.Endpoint.CreateVersion)
+            .RequireAuthorization();
 
         return builder;
     }

@@ -5,7 +5,7 @@ namespace Zenthrill.Domain.Aggregates;
 
 public sealed class Story
 {
-    public required StoryInfo StoryInfo { get; init; }
+    public required StoryInfoVersion StoryInfoVersion { get; init; }
 
     private readonly List<Fragment> _components = [];
 

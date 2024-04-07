@@ -6,7 +6,7 @@ builder.AddOutboxMessageConsumerConfiguration(typeof(CreateExampleStoryOutboxMes
 builder.AddGraphDatabaseConfiguration();
 builder.AddApplicationDbContextConfiguration();
 
-builder.Services.AddCreateExampleStoryCallbackFeature();
+builder.Services.AddCallbackFeatures();
 builder.Services.AddHostedService<Consumer>();
 builder.Services.AddLocalizerFactory();
 

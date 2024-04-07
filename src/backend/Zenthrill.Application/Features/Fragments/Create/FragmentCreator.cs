@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Zenthrill.Application.Results;
-using Zenthrill.Application.Specs;
 using Zenthrill.Domain.Entities;
 
 namespace Zenthrill.Application.Features.Fragments.Create;
@@ -18,20 +17,26 @@ public sealed class FragmentCreator(
 {
     public async Task<CreateFragmentOneOf> CreateAsync(CreateFragmentRequest request, CancellationToken cancellationToken)
     {
-        return await graphDbContext.ExecuteAsync<CreateFragmentOneOf>(async (repositoryRegistry, ct) =>
+        return await graphDbContext.ExecuteAsync<CreateFragmentOneOf>(async (repositoryRegistry, _) =>
         {
-            var storyInfo = await applicationDbContext.StoryInfos
-                .Include(storyInfo => storyInfo.Creator)
-                .FirstOrDefaultAsync(StoryInfoSpecs.ById(request.StoryInfoId), cancellationToken);
+            var storyInfoVersion = await applicationDbContext.StoryInfoVersions
+                .Include(siv => siv.StoryInfo)
+                .Include(siv => siv.SubVersions)
+                .FirstOrDefaultAsync(StoryInfoVersion.ById(request.StoryInfoVersionId), cancellationToken);
 
-            if (storyInfo is null)
+            if (storyInfoVersion is null)
             {
-                return NotFound.ById(request.StoryInfoId);
+                return NotFound.ById(request.StoryInfoVersionId);
             }
 
-            if (!request.User.HasAccessToUpdate(storyInfo))
+            if (!request.User.HasAccessToUpdate(storyInfoVersion.StoryInfo))
             {
                 return new Forbid();
+            }
+
+            if (storyInfoVersion.IsBaseVersion)
+            {
+                return new ForbidEditBaseVersion();
             }
 
             var result = await validator.ValidateAsync(request, cancellationToken);
@@ -49,7 +54,7 @@ public sealed class FragmentCreator(
             };
 
             await repositoryRegistry.FragmentRepository
-                .CreateAsync(fragment, storyInfo.Id);
+                .CreateAsync(fragment, storyInfoVersion.Id);
 
             return fragmentId;
         }, cancellationToken);

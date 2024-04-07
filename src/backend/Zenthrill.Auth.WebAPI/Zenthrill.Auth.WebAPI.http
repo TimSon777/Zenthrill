@@ -1,0 +1,6 @@
+@Zenthrill.Auth.WebAPI_HostAddress = http://localhost:5273
+
+GET {{Zenthrill.Auth.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

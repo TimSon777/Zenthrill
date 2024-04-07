@@ -12,9 +12,9 @@ public sealed class StoryRepository(
     BoltGraphClient boltGraphClient,
     ILabelsConverter labelsConverter) : IStoryRepository
 {
-    public async Task<Story> ReadAsync(StoryInfo storyInfo, CancellationToken cancellationToken)
+    public async Task<Story> ReadAsync(StoryInfoVersion storyInfoVersion, CancellationToken cancellationToken)
     {
-        var label = labelsConverter.Convert(storyInfo.Id);
+        var label = labelsConverter.Convert(storyInfoVersion.Id);
         
         var fragmentResults = await boltGraphClient.Cypher
             .Match($"(fragment:{label})")
@@ -29,7 +29,7 @@ public sealed class StoryRepository(
                 {
                     Body = fragmentResult.Body,
                     Id = fragmentId,
-                    IsEntrypoint = storyInfo.EntrypointFragmentId == fragmentId
+                    IsEntrypoint = storyInfoVersion.EntrypointFragmentId == fragmentId
                 };
             })
             .ToList();
@@ -56,7 +56,7 @@ public sealed class StoryRepository(
             };
         }
 
-        var story = new Story { StoryInfo = storyInfo };
+        var story = new Story { StoryInfoVersion = storyInfoVersion };
 
         foreach (var fragment in fragments)
         {

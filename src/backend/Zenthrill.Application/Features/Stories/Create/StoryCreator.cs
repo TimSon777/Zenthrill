@@ -24,15 +24,10 @@ public sealed class StoryCreator(
             return new ValidationFailure(result.ToDictionary());
         }
 
-        var version = StoryVersion.Create(1, 0, "0").AsT0;
-
-        applicationDbContext.Users.Attach(request.User);
         var storyInfo = new StoryInfo
         {
-            Creator = request.User,
-            StoryName = request.Name,
-            EntrypointFragmentId = null,
-            Version = version
+            Description = request.Description,
+            CreatorId = request.User.Id
         };
 
         applicationDbContext.StoryInfos.Add(storyInfo);

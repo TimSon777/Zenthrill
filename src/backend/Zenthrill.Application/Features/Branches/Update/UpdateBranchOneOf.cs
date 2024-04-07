@@ -8,10 +8,11 @@ public sealed class UpdateBranchOneOf : OneOfBase<
     BranchId,
     ValidationFailure,
     Forbid,
-    NotFound<StoryInfoId>,
-    NotFound<BranchId>>
+    NotFound<StoryInfoVersionId>,
+    NotFound<BranchId>,
+    ForbidEditBaseVersion>
 {
-    public UpdateBranchOneOf(OneOf<BranchId, ValidationFailure, Forbid, NotFound<StoryInfoId>, NotFound<BranchId>> input)
+    public UpdateBranchOneOf(OneOf<BranchId, ValidationFailure, Forbid, NotFound<StoryInfoVersionId>, NotFound<BranchId>, ForbidEditBaseVersion> input)
         : base(input)
     {
     }
@@ -19,6 +20,7 @@ public sealed class UpdateBranchOneOf : OneOfBase<
     public static implicit operator UpdateBranchOneOf(BranchId _) => new(_);
     public static implicit operator UpdateBranchOneOf(ValidationFailure _) => new(_);
     public static implicit operator UpdateBranchOneOf(Forbid _) => new(_);
-    public static implicit operator UpdateBranchOneOf(NotFound<StoryInfoId> _) => new(_);
+    public static implicit operator UpdateBranchOneOf(NotFound<StoryInfoVersionId> _) => new(_);
     public static implicit operator UpdateBranchOneOf(NotFound<BranchId> _) => new(_);
+    public static implicit operator UpdateBranchOneOf(ForbidEditBaseVersion _) => new(_);
 }

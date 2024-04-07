@@ -7,10 +7,12 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
     public IEndpointRouteBuilder Register(IEndpointRouteBuilder builder)
     {
         builder
-            .MapPost("/branches", Create.Endpoint.Create);
+            .MapPost("/branches", Create.Endpoint.Create)
+            .RequireAuthorization();
 
         builder
-            .MapPut("/branches", Update.Endpoint.Update);
+            .MapPut("/branches", Update.Endpoint.Update)
+            .RequireAuthorization();
 
         return builder;
     }
