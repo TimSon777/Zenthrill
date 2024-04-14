@@ -1,13 +1,10 @@
-import { IStoryInfo } from '@/app/types';
 import storyClient from "@/axios-clients/storyClient";
 
-export default async function addStory(description: string) : Promise<IStoryInfo> {
-    const response = await storyClient.post<string>("/stories", {
+export default async function addStory(description: string) : Promise<string> {
+    const response = await storyClient.post<{id: string}>("/stories", {
         description
     });
     
-    return {
-        id: response.data,
-        description
-    };
+    console.log(response)
+    return response.data.id;
 }
