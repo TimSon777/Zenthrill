@@ -12,7 +12,7 @@ public sealed class StoryRepository(
     BoltGraphClient boltGraphClient,
     ILabelsConverter labelsConverter) : IStoryRepository
 {
-    public async Task<Story> ReadAsync(StoryInfoVersion storyInfoVersion, CancellationToken cancellationToken)
+    public async Task<StoryVersion> ReadAsync(StoryInfoVersion storyInfoVersion, CancellationToken cancellationToken)
     {
         var label = labelsConverter.Convert(storyInfoVersion.Id);
         
@@ -56,7 +56,7 @@ public sealed class StoryRepository(
             };
         }
 
-        var story = new Story { StoryInfoVersion = storyInfoVersion };
+        var story = new StoryVersion { StoryInfoVersion = storyInfoVersion };
 
         foreach (var fragment in fragments)
         {

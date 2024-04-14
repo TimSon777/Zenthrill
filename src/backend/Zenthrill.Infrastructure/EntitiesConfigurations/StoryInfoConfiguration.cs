@@ -17,6 +17,8 @@ public sealed class StoryInfoConfiguration : IEntityTypeConfiguration<StoryInfo>
 
         builder
             .Property(x => x.CreatorId)
-            .HasColumnName("CreatorId");
+            .HasConversion(
+                x => x.Value,
+                x => new UserId(x));
     }
 }

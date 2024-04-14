@@ -18,8 +18,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    public DbSet<User> Users => Set<User>();
-
     public DbSet<StoryInfo> StoryInfos => Set<StoryInfo>();
 
     public DbSet<StoryInfoVersion> StoryInfoVersions => Set<StoryInfoVersion>();

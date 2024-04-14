@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +18,12 @@
       <ProjectReference Include="..\..\backend-libs\Zenthrill.APIResponses\Zenthrill.APIResponses.csproj" />
       <ProjectReference Include="..\..\backend-libs\Zenthrill.Outbox.Publisher\Zenthrill.Outbox.Publisher.csproj" />
       <ProjectReference Include="..\Zenthrill.Infrastructure\Zenthrill.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
     
 </Project>

@@ -23,6 +23,10 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
             .MapPost("/story-versions", CreateVersion.Endpoint.CreateVersion)
             .RequireAuthorization();
 
+        builder
+            .MapGet("stories", Read.Endpoint.Read)
+            .RequireAuthorization();
+ 
         return builder;
     }
 }

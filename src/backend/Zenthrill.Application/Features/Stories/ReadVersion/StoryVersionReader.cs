@@ -1,19 +1,17 @@
 using Microsoft.EntityFrameworkCore;
-using Zenthrill.Application.Features.Stories.ReadVersion;
 using Zenthrill.Application.Results;
-using Zenthrill.Application.Specs;
 using Zenthrill.Domain.Entities;
 
-namespace Zenthrill.Application.Features.Stories.Read;
+namespace Zenthrill.Application.Features.Stories.ReadVersion;
 
-public interface IStoryReader
+public interface IStoryVersionReader
 {
     Task<ReadStoryVersionOneOf> ReadAsync(ReadStoryVersionRequest versionRequest, CancellationToken cancellationToken);
 }
 
-public sealed class StoryVersionReader(
+public sealed class StoryVersionVersionReader(
     IApplicationDbContext applicationDbContext,
-    IGraphDbContext graphDbContext) : IStoryReader
+    IGraphDbContext graphDbContext) : IStoryVersionReader
 {
     public async Task<ReadStoryVersionOneOf> ReadAsync(ReadStoryVersionRequest versionRequest,
         CancellationToken cancellationToken)

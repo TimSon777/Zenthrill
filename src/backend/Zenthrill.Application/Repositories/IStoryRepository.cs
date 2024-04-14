@@ -5,5 +5,5 @@ namespace Zenthrill.Application.Repositories;
 
 public interface IStoryRepository
 {
-    Task<Story> ReadAsync(StoryInfoVersion storyInfoVersion, CancellationToken cancellationToken);
+    Task<StoryVersion> ReadAsync(StoryInfoVersion storyInfoVersion, CancellationToken cancellationToken);
 }

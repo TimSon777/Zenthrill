@@ -1,6 +1,20 @@
 version: 2.23.3
 
 services:
+  story:
+    build:
+      context: .
+      dockerfile: ./src/backend/Zenthrill.WebAPI/Dockerfile
+    ports:
+      - 8081:80
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+
   graph_db:
     image: neo4j:enterprise
     ports:
@@ -22,6 +36,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USER}
+      - PGUSER=${DB_USER}
     volumes:
       - ./volumes/main_database:/var/lib/postgresql
       - ./Sql:/docker-entrypoint-initdb.d
@@ -56,10 +71,12 @@ services:
       - DOTNET_ENVIRONMENT=${ENVIRONMENT}
       - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${AUTH_DB_NAME}
 
-  identity_provider:
+  identity_server:
     build:
-      context: ./src/backend
-      dockerfile: ./Zenthrill.Auth.WebAPI/Dockerfile
+      context: .
+      dockerfile: ./src/backend/Zenthrill.Auth.WebAPI/Dockerfile
+    ports:
+      - 8080:80
     depends_on:
       db:
         condition: service_healthy
@@ -67,6 +84,7 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=${ENVIRONMENT}
       - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${AUTH_DB_NAME}
+      - ASPNETCORE_URLS=http://+:80
 
   story_broker:
     image: rabbitmq:3.10.7-management
@@ -78,7 +96,7 @@ services:
       - ${STORY_BROKER_BROWSER_EXTERNAL_PORT}:${STORY_BROKER_BROWSER_INTERNAL_PORT}
       - ${STORY_BROKER_EXTERNAL_PORT}:${STORY_BROKER_INTERNAL_PORT}
 
-  story_redis:
+  redis:
     image: bitnami/redis
     environment:
       - REDIS_PASSWORD=${STORY_REDIS_PASSWORD}

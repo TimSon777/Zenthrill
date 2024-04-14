@@ -2,5 +2,5 @@
 
 public sealed class Request
 {
-    public required string Name { get; set; } = default!;
+    public required string Description { get; set; } = default!;
 }

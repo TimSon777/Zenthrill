@@ -21,8 +21,6 @@ public sealed class ExampleStoryVersionCreator(
     {
         var localizer = localizerFactory.CreateLocalizer(request.Locale);
 
-        applicationDbContext.Users.Attach(request.User);
-
         var storyInfoVersion = new StoryInfoVersion
         {
             EntrypointFragmentId = FragmentId.New(),
