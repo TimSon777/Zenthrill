@@ -34,7 +34,7 @@ public sealed class ExampleStoryVersionCreatorCallback(
         }, cancellationToken);
     }
     
-    private Story CreateStoryVersion(StoryInfoVersion storyInfoVersion, Locale locale)
+    private StoryVersion CreateStoryVersion(StoryInfoVersion storyInfoVersion, Locale locale)
     {
         var localizer = localizerFactory.CreateLocalizer(locale);
 
@@ -79,7 +79,7 @@ public sealed class ExampleStoryVersionCreatorCallback(
             Inscription = localizer.ExampleStoryBranchFragment2ToFragment3()
         };
         
-        var story = new Story
+        var story = new StoryVersion
         {
             StoryInfoVersion = storyInfoVersion
         };
