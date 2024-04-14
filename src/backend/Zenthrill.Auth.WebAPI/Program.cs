@@ -74,6 +74,7 @@ builder.Services
         options
             .SetAccessTokenLifetime(TimeSpan.FromDays(365))
             .AllowPasswordFlow()
+            .SetIssuer("http://identity_server:80")
             .SetTokenEndpointUris("/connect/token")
             .AcceptAnonymousClients()
             .UseAspNetCore(openIddictServerAspNetCoreBuilder =>

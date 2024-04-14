@@ -3,12 +3,11 @@ using Zenthrill.Application.Features.Branches.Update;
 using Zenthrill.Application.Features.Files.GetUploadLink;
 using Zenthrill.Application.Features.Fragments.Create;
 using Zenthrill.Application.Features.Fragments.Update;
-using Zenthrill.Application.Features.Stories;
 using Zenthrill.Application.Features.Stories.Create;
 using Zenthrill.Application.Features.Stories.CreateVersion;
 using Zenthrill.Application.Features.Stories.ExampleVersionCreate;
 using Zenthrill.Application.Features.Stories.Read;
-using Zenthrill.Domain.Entities;
+using Zenthrill.Application.Features.Stories.ReadVersion;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,8 @@ public static class FeaturesConfiguration
     public static IServiceCollection AddFeatures(this IServiceCollection services)
     {
         services
-            .AddScoped<IStoryVersionCreator, StoryVersionCreator>();
+            .AddScoped<IStoryVersionCreator, StoryVersionCreator>()
+            .AddScoped<IStoryReader, StoryReader>();
 
         return services;
     }
@@ -42,7 +42,7 @@ public static class FeaturesConfiguration
 
     public static IServiceCollection AddReadStoryFeature(this IServiceCollection services)
     {
-        return services.AddScoped<IStoryReader, StoryVersionReader>();
+        return services.AddScoped<IStoryVersionReader, StoryVersionVersionReader>();
     }
 
     public static IServiceCollection AddCreateBranchFeature(this IServiceCollection services)

@@ -1,4 +1,4 @@
-namespace Zenthrill.WebAPI.Features.Story.ReadVersion.Objects;
+namespace Zenthrill.WebAPI.Objects;
 
 public sealed class BranchDto
 {

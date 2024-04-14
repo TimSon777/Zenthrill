@@ -7,7 +7,7 @@ public sealed class CreateStoryVersionRequest
 {
    public required string Name { get; set; }
    
-   public required StoryVersionDto Version { get; set; }
+   public required VersionDto Version { get; set; }
    
    public required User User { get; set; }
 

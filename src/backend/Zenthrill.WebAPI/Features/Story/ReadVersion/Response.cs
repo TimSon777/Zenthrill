@@ -1,4 +1,4 @@
-using Zenthrill.WebAPI.Features.Story.ReadVersion.Objects;
+using Zenthrill.WebAPI.Objects;
 
 namespace Zenthrill.WebAPI.Features.Story.ReadVersion;
 

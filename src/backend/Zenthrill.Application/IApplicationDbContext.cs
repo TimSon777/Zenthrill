@@ -7,8 +7,6 @@ namespace Zenthrill.Application;
 
 public interface IApplicationDbContext
 {
-    DbSet<User> Users { get; }
-
     DbSet<StoryInfo> StoryInfos { get; }
     
     DbSet<OutboxMessage> OutboxMessages { get; }

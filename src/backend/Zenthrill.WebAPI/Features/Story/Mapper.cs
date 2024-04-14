@@ -3,11 +3,11 @@ using Zenthrill.Application.Features.Stories.Create;
 using Zenthrill.Application.Features.Stories.CreateVersion;
 using Zenthrill.Application.Features.Stories.CreateVersion.Objects;
 using Zenthrill.Application.Features.Stories.ExampleVersionCreate;
+using Zenthrill.Application.Features.Stories.Read;
 using Zenthrill.Application.Features.Stories.ReadVersion;
 using Zenthrill.WebAPI.Common;
 using Zenthrill.WebAPI.Features.Story.ExampleVersionCreate;
-using Zenthrill.WebAPI.Features.Story.ReadVersion.Objects;
-using Response = Zenthrill.WebAPI.Features.Story.ReadVersion.Response;
+using Zenthrill.WebAPI.Objects;
 
 namespace Zenthrill.WebAPI.Features.Story;
 
@@ -21,7 +21,11 @@ public interface IMapper
 
     CreateStoryVersionRequest MapToApplicationRequest(CreateVersion.Request request, ClaimsPrincipal user);
 
-    Response MapFromApplicationResponse(Domain.Aggregates.Story story);
+    ReadStoryRequest MapToApplicationRequest(Read.Request request, ClaimsPrincipal user);
+
+    ReadVersion.Response MapFromApplicationResponse(Domain.Aggregates.StoryVersion storyVersion);
+
+    Read.Response MapFromApplicationResponse(Domain.Aggregates.Story story);
 }
 
 public sealed class Mapper(IUserMapper userMapper) : IMapper
@@ -40,7 +44,7 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
     {
         return new CreateStoryRequest
         {
-            Description = request.Name,
+            Description = request.Description,
             User = userMapper.MapToApplicationUser(user)
         };
     }
@@ -53,21 +57,47 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
             User = userMapper.MapToApplicationUser(user)
         };
     }
-    
-    public Response MapFromApplicationResponse(Domain.Aggregates.Story story)
+
+    public ReadStoryRequest MapToApplicationRequest(Read.Request request, ClaimsPrincipal user)
     {
-        return new Response
+        return new ReadStoryRequest
+        {
+            StoryInfoId = new StoryInfoId(request.Id),
+            User = userMapper.MapToApplicationUser(user)
+        };
+    }
+
+    public ReadVersion.Response MapFromApplicationResponse(Domain.Aggregates.StoryVersion storyVersion)
+    {
+        return new ReadVersion.Response
         {
             StoryInfo = new StoryInfoDto
             {
-                Id = story.StoryInfoVersion.Id.Value,
-                Description = story.StoryInfoVersion.StoryInfo.Description
+                Id = storyVersion.StoryInfoVersion.Id.Value,
+                Description = storyVersion.StoryInfoVersion.StoryInfo.Description
             },
-            Name = story.StoryInfoVersion.Name,
-            Components = story.Components.Select(c => new ComponentDto
+            Name = storyVersion.StoryInfoVersion.Name,
+            Components = storyVersion.Components.Select(c => new ComponentDto
             {
                 Branches = c.TraverseBranches().Select(MapToBranchDto),
                 Fragments = c.TraverseFragments().Select(MapToFragmentDto)
+            })
+        };
+    }
+
+    public Read.Response MapFromApplicationResponse(Domain.Aggregates.Story story)
+    {
+        return new Read.Response
+        {
+            StoryInfo = new StoryInfoDto
+            {
+                Id = story.StoryInfoId.Value,
+                Description = story.Description
+            },
+            Versions = story.Versions.Select(v => new StoryVersionDto
+            {
+                Id = v.Id.Value,
+                Name = v.Name
             })
         };
     }
@@ -80,7 +110,7 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
             BaseStoryInfoVersionId = new StoryInfoVersionId(request.BaseStoryInfoVersionId),
             Name = request.Name,
             User = userMapper.MapToApplicationUser(user),
-            Version = new StoryVersionDto
+            Version = new VersionDto
             {
                 Major = request.Version.Major,
                 Minor = request.Version.Minor,

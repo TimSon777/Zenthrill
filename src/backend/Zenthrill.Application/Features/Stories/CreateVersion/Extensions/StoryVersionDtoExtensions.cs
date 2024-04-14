@@ -5,7 +5,7 @@ namespace Zenthrill.Application.Features.Stories.CreateVersion.Extensions;
 
 public static class StoryVersionDtoExtensions
 {
-    public static bool Equals(this StoryVersionDto versionDto, StoryVersion version)
+    public static bool Equals(this VersionDto versionDto, StoryVersion version)
     {
         return versionDto.Major == version.Major
             && versionDto.Minor == version.Minor

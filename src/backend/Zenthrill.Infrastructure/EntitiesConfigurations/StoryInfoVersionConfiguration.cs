@@ -10,6 +10,12 @@ public sealed class StoryInfoVersionConfiguration : IEntityTypeConfiguration<Sto
     public void Configure(EntityTypeBuilder<StoryInfoVersion> builder)
     {
         builder
+            .Property(storyInfoVersion => storyInfoVersion.StoryInfoId)
+            .HasConversion(
+                x => x.Value,
+                x => new StoryInfoId(x));
+
+        builder
             .Property(storyInfoVersion => storyInfoVersion.Id)
             .HasConversion(
                 x => x.Value,
