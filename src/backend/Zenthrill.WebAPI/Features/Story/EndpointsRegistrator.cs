@@ -24,7 +24,7 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
             .RequireAuthorization();
 
         builder
-            .MapGet("stories", Read.Endpoint.Read)
+            .MapGet("stories/{id}", Read.Endpoint.Read)
             .RequireAuthorization();
  
         return builder;

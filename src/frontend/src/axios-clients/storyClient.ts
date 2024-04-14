@@ -18,11 +18,14 @@ storyClient.interceptors.request.use((config) => {
 });
 
 storyClient.interceptors.response.use(
+    // @ts-ignore
     response => {
         const { code } = response.data;
         
         if (code === 'success') {
-            return response.data.value;
+            return {
+                data: response.data.value
+            }
         }
         
         throw new Error(code);

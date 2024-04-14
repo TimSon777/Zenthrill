@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Modal, Textarea, Button, Group } from '@mantine/core';
 import addStory from '../addStory';
+import { useRouter } from 'next/navigation';
 
 interface IProps {
     opened: boolean;
@@ -10,12 +11,14 @@ interface IProps {
 };
 
 const AddStoryModal = ({ opened, close }: IProps) => {
-    const [newStoryDescription, setNewStoryDescription] = useState('');
+    const [description, setDescription] = useState('');
+    const router = useRouter();
 
-    const handleAddStory = () => {
-        addStory(newStoryDescription);
-        setNewStoryDescription('');
+    const handleAddStory = async () => {
+        const storyId = await addStory(description);
+        setDescription('');
         close();
+        router.push(`/stories/${storyId}`);
     };
 
     return (
@@ -27,8 +30,8 @@ const AddStoryModal = ({ opened, close }: IProps) => {
             <Textarea
                 label="Описание истории"
                 placeholder="Введите описание новой истории"
-                value={newStoryDescription}
-                onChange={(event) => setNewStoryDescription(event.currentTarget.value)}
+                value={description}
+                onChange={(event) => setDescription(event.currentTarget.value)}
                 autosize
                 minRows={3}
                 mt="sm"
