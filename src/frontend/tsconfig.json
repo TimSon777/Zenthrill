@@ -20,7 +20,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/axios-clients": ["./src/axios-clients/*"],
-      "@/components": ["./src/components/*"]
+      "@/components": ["./src/components/*"],
+      "@/api": ["./src/app/api/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

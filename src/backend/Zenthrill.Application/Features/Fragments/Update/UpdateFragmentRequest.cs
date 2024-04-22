@@ -11,4 +11,6 @@ public sealed class UpdateFragmentRequest
     public required string Body { get; init; }
     
     public required User User { get; init; }
+    
+    public required string Name { get; set; }
 }

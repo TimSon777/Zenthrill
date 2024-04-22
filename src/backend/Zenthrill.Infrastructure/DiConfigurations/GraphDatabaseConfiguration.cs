@@ -6,7 +6,6 @@ using Zenthrill.Application.Interfaces;
 using Zenthrill.Application.Repositories;
 using Zenthrill.Application.Settings;
 using Zenthrill.Infrastructure.GraphDatabase.Repositories;
-using Zenthrill.Infrastructure.Repositories;
 using Zenthrill.Infrastructure.Services;
 using Zenthrill.Settings.DependencyInjection;
 using GraphDatabase = Neo4j.Driver.GraphDatabase;

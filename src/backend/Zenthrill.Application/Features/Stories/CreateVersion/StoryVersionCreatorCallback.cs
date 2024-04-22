@@ -22,7 +22,7 @@ public sealed class StoryVersionCreatorCallback(
 
         if (storyInfoVersion.BaseVersion is null)
         {
-            throw new InvalidOperationException("BaseVersion is required.");
+            throw new InvalidOperationException($"BaseVersion is required. StoryInfoVersionId = {storyInfoVersion.Id.Value}");
         }
 
         await graphDbContext.ExecuteAsync(
@@ -43,6 +43,7 @@ public sealed class StoryVersionCreatorCallback(
                             return new Fragment(storyInfoVersion.EntrypointFragmentId!.Value)
                             {
                                 Body = f.Body,
+                                Name = f.Name,
                                 IsEntrypoint = false
                             }; 
                         }
@@ -50,6 +51,7 @@ public sealed class StoryVersionCreatorCallback(
                         return new Fragment
                         {
                             Body = f.Body,
+                            Name = f.Name,
                             IsEntrypoint = true
                         };
                     });
@@ -62,8 +64,10 @@ public sealed class StoryVersionCreatorCallback(
                             Inscription = b.Inscription
                         });
 
+                Console.WriteLine("AAAA");
                 foreach (var branch in branches)
                 {
+                    Console.WriteLine(branch.Id);
                     await repositoryRegistry.BranchRepository
                         .CreateAsync(branch, storyInfoVersion.Id);
                 }

@@ -56,6 +56,7 @@ public sealed class FragmentUpdater(
                 return NotFound.ById(request.FragmentId);
             }
 
+            fragment.Name = request.Name;
             fragment.Body = request.Body;
 
             await repositoryRegistry.FragmentRepository

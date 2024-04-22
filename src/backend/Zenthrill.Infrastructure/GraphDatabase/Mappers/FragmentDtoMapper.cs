@@ -10,6 +10,7 @@ public static class FragmentDtoMapper
         return new Fragment
         {
             Id = new FragmentId(Guid.Parse(fragmentDto.Id)),
+            Name = fragmentDto.Name,
             Body = fragmentDto.Body
         };
     }

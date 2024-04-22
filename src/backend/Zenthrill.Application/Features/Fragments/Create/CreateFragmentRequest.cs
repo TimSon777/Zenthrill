@@ -9,4 +9,8 @@ public sealed class CreateFragmentRequest
     public required string Body { get; init; }
     
     public required User User { get; init; }
+
+    public required FragmentId? FromFragmentId { get; set; }
+
+    public required string Name { get; set; }
 }

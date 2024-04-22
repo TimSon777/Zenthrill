@@ -4,7 +4,6 @@ using Zenthrill.Application.Repositories;
 using Zenthrill.Domain.Aggregates;
 using Zenthrill.Domain.Entities;
 using Zenthrill.Infrastructure.GraphDatabase.Objects;
-using Zenthrill.Infrastructure.Repositories;
 
 namespace Zenthrill.Infrastructure.GraphDatabase.Repositories;
 
@@ -29,6 +28,7 @@ public sealed class StoryRepository(
                 {
                     Body = fragmentResult.Body,
                     Id = fragmentId,
+                    Name = fragmentResult.Name,
                     IsEntrypoint = storyInfoVersion.EntrypointFragmentId == fragmentId
                 };
             })

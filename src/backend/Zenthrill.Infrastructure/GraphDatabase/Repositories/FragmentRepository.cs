@@ -3,7 +3,6 @@ using Zenthrill.Application.Interfaces;
 using Zenthrill.Application.Repositories;
 using Zenthrill.Domain.Entities;
 using Zenthrill.Infrastructure.GraphDatabase.Objects;
-using Zenthrill.Infrastructure.Repositories;
 
 namespace Zenthrill.Infrastructure.GraphDatabase.Repositories;
 
@@ -31,6 +30,7 @@ public sealed class FragmentRepository(
 
         return new Fragment(new FragmentId(Guid.Parse(result.Id)))
         {
+            Name = result.Name,
             Body = result.Body
         };
     }
@@ -44,6 +44,7 @@ public sealed class FragmentRepository(
         var fragmentDto = new FragmentDto
         {
             Id = fragmentId,
+            Name = fragment.Name,
             Body = fragment.Body
         };
 
@@ -64,18 +65,19 @@ public sealed class FragmentRepository(
         var fragmentDto = new FragmentDto
         {
             Id = fragmentId,
+            Name = fragment.Name,
             Body = fragment.Body
         };
 
-        var fragmentParam = $"fragment{fragment.Id.Value:N}";
-        var fragmentIdParam = $"fragmentId{fragment.Id.Value:N}";
-
         await boltGraphClient.Cypher
-            .Match($"({fragmentParam}-{fragmentId}:{label})")
-            .Where($"{fragmentParam}.Id = {fragmentIdParam}")
-            .Set($"{fragmentParam} = ${fragmentParam}")
-            .WithParam(fragmentIdParam, fragmentId)
-            .WithParam(fragmentParam, fragmentDto)
+            .Match($"(fragment:{label})") // Используйте label для идентификации типа узла
+            .Where("fragment.Id = $fragmentId") // Используйте параметр для идентификатора узла
+            .Set("fragment = $fragmentDto") // Обновите поля узла, используя DTO
+            .WithParams(new
+            {
+                fragmentId,
+                fragmentDto
+            })
             .ExecuteWithoutResultsAsync();
     }
 }

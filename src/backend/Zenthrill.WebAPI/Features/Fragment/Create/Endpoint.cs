@@ -18,10 +18,11 @@ public static class Endpoint
         var result = await fragmentCreator.CreateAsync(createStoryRequest, cancellationToken);
 
         return result.Match<IResult>(
-            fragmentId => TypedResults.Ok(ApiResponses.Success(fragmentId.Value)),
+            fragmentId => TypedResults.Ok(ApiResponses.Success(new Response { Id = fragmentId.Value })),
             validationFailure => TypedResults.BadRequest(ApiResponses.Failure(DefaultStatusCodes.BadRequest, validationFailure.Errors)),
             forbid => TypedResults.Forbid(),
             notFound => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFound.Id)),
+            notFoundFragment => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFoundFragment.Id)),
             forbidEditBaseVersion => TypedResults.UnprocessableEntity(ApiResponses.Failure(StatusCodes.ForbidEditBaseVersion)));
     }
 }

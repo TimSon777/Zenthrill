@@ -57,11 +57,6 @@ public sealed class OutboxMessageProcessor(
             }
             catch (Exception ex)
             {
-                if (transaction is not null)
-                {
-                    await transaction.RollbackAsync(cancellationToken);
-                }
-
                 if (outboxMessage is not null)
                 {
                     logger.LogError(ex, "Exception occured when process outbox message with id {Id}", outboxMessage.Id);
@@ -69,6 +64,11 @@ public sealed class OutboxMessageProcessor(
                 else
                 {
                     logger.LogError(ex, "Exception occured when process outbox message");
+                }
+
+                if (transaction is not null)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
                 }
             }
             finally

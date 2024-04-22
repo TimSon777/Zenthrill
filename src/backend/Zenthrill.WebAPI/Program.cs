@@ -1,7 +1,5 @@
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using Zenthrill.Application.Settings;
-using Zenthrill.Settings.DependencyInjection;
+using Zenthrill.Application;
 using Zenthrill.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

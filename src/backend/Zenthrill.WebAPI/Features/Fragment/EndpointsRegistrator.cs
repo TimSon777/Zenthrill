@@ -14,6 +14,10 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
             .MapPost("/fragments", Create.Endpoint.Create)
             .RequireAuthorization();
 
+        builder
+            .MapPut("/fragments/entrypoint", MarkEntrypoint.Endpoint.Mark)
+            .RequireAuthorization();
+
         return builder;
     }
 }

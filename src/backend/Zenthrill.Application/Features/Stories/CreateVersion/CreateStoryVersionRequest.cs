@@ -11,5 +11,7 @@ public sealed class CreateStoryVersionRequest
    
    public required User User { get; set; }
 
-   public required StoryInfoVersionId BaseStoryInfoVersionId { get; set; }
+   public required StoryInfoVersionId? BaseStoryInfoVersionId { get; set; }
+   
+   public required StoryInfoId StoryInfoId { get; set; }
 }
