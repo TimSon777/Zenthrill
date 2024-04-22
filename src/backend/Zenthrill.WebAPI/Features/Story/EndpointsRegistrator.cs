@@ -8,7 +8,7 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
     public IEndpointRouteBuilder Register(IEndpointRouteBuilder builder)
     {
         builder
-            .MapGet("/story-versions", ReadVersion.Endpoint.ReadVersion)
+            .MapGet("/story-versions/{id}", ReadVersion.Endpoint.ReadVersion)
             .RequireAuthorization();
         
         builder
@@ -26,7 +26,11 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
         builder
             .MapGet("stories/{id}", Read.Endpoint.Read)
             .RequireAuthorization();
- 
+
+        builder
+            .MapGet("stories", List.Endpoint.List)
+            .RequireAuthorization();
+
         return builder;
     }
 }

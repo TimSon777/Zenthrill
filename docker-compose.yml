@@ -15,6 +15,17 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
 
+  story_consumer:
+    build:
+      context: .
+      dockerfile: ./src/backend/Zenthrill.Story.Consumer/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+
   graph_db:
     image: neo4j:enterprise
     ports:

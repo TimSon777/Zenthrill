@@ -20,7 +20,8 @@ public static class Endpoint
 
         return result.Match<IResult>(
             storyVersionId => TypedResults.Ok(ApiResponses.Success(new Response { Id = storyVersionId.Value })),
-            notFound => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFound.Id)),
+            notFoundStory => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFoundStory.Id)),
+            notFoundVersion => TypedResults.UnprocessableEntity(ApiResponses.NotFound(notFoundVersion.Id)),
             validationFailure => TypedResults.BadRequest(ApiResponses.Failure(DefaultStatusCodes.BadRequest, validationFailure.Errors)),
             forbid => TypedResults.Forbid());
     }

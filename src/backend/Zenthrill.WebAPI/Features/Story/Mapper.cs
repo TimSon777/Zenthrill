@@ -3,6 +3,7 @@ using Zenthrill.Application.Features.Stories.Create;
 using Zenthrill.Application.Features.Stories.CreateVersion;
 using Zenthrill.Application.Features.Stories.CreateVersion.Objects;
 using Zenthrill.Application.Features.Stories.ExampleVersionCreate;
+using Zenthrill.Application.Features.Stories.List;
 using Zenthrill.Application.Features.Stories.Read;
 using Zenthrill.Application.Features.Stories.ReadVersion;
 using Zenthrill.WebAPI.Common;
@@ -23,6 +24,10 @@ public interface IMapper
 
     ReadStoryRequest MapToApplicationRequest(Read.Request request, ClaimsPrincipal user);
 
+    ListStoryRequest MapToApplicationRequest(ClaimsPrincipal user);
+
+    List.Response MapFromApplicationResponse(IEnumerable<StoryInfo> storyInfos);
+
     ReadVersion.Response MapFromApplicationResponse(Domain.Aggregates.StoryVersion storyVersion);
 
     Read.Response MapFromApplicationResponse(Domain.Aggregates.Story story);
@@ -34,7 +39,6 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
     {
         return new ExampleStoryVersionCreateRequest
         {
-            Locale = request.Locale,
             StoryInfoId = new StoryInfoId(request.StoryInfoId),
             User = userMapper.MapToApplicationUser(user)
         };
@@ -67,6 +71,26 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
         };
     }
 
+    public ListStoryRequest MapToApplicationRequest(ClaimsPrincipal user)
+    {
+        return new ListStoryRequest
+        {
+            User = userMapper.MapToApplicationUser(user)
+        };
+    }
+
+    public List.Response MapFromApplicationResponse(IEnumerable<StoryInfo> storyInfos)
+    {
+        return new List.Response
+        {
+            StoryInfos = storyInfos.Select(si => new StoryInfoDto
+            {
+                Id = si.Id.Value,
+                Description = si.Description
+            })
+        };
+    }
+
     public ReadVersion.Response MapFromApplicationResponse(Domain.Aggregates.StoryVersion storyVersion)
     {
         return new ReadVersion.Response
@@ -81,7 +105,9 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
             {
                 Branches = c.TraverseBranches().Select(MapToBranchDto),
                 Fragments = c.TraverseFragments().Select(MapToFragmentDto)
-            })
+            }),
+            Version = MapToVersionDto(storyVersion.StoryInfoVersion.Version),
+            Id = storyVersion.StoryInfoVersion.Id.Value
         };
     }
 
@@ -97,7 +123,8 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
             Versions = story.Versions.Select(v => new StoryVersionDto
             {
                 Id = v.Id.Value,
-                Name = v.Name
+                Name = v.Name,
+                Version = MapToVersionDto(v.Version)
             })
         };
     }
@@ -107,7 +134,10 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
     {
         return new CreateStoryVersionRequest
         {
-            BaseStoryInfoVersionId = new StoryInfoVersionId(request.BaseStoryInfoVersionId),
+            StoryInfoId = new StoryInfoId(request.StoryInfoId),
+            BaseStoryInfoVersionId = request.BaseStoryInfoVersionId.HasValue
+                ? new StoryInfoVersionId(request.BaseStoryInfoVersionId.Value)
+                : null,
             Name = request.Name,
             User = userMapper.MapToApplicationUser(user),
             Version = new VersionDto
@@ -125,7 +155,8 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
         {
             Id = fragment.Id.Value,
             IsEntrypoint = fragment.IsEntrypoint,
-            Body = fragment.Body
+            Body = fragment.Body,
+            Name = fragment.Name
         };
     }
     
@@ -137,6 +168,16 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
             Inscription = branch.Inscription,
             FromFragmentId = branch.FromFragment.Id.Value,
             ToFragmentId = branch.ToFragment.Id.Value
+        };
+    }
+
+    private static VersionDto MapToVersionDto(StoryVersion version)
+    {
+        return new VersionDto
+        {
+            Major = version.Major,
+            Minor = version.Minor,
+            Suffix = version.Suffix
         };
     }
 }

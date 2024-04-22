@@ -8,6 +8,8 @@ public partial struct FragmentId;
 
 public sealed class Fragment : Entity<FragmentId>
 {
+    public required string Name { get; set; }
+
     public required string Body { get; set; }
 
     public List<Branch> InputBranches { get; set; } = [];

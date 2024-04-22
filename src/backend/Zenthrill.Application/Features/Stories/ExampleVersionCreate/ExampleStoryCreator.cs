@@ -19,7 +19,7 @@ public sealed class ExampleStoryVersionCreator(
 {
     public async Task<StoryInfoVersionId> CreateAsync(ExampleStoryVersionCreateRequest request, CancellationToken cancellationToken)
     {
-        var localizer = localizerFactory.CreateLocalizer(request.Locale);
+        var localizer = localizerFactory.CreateLocalizer(Locale.ruRU);
 
         var storyInfoVersion = new StoryInfoVersion
         {
@@ -34,8 +34,7 @@ public sealed class ExampleStoryVersionCreator(
 
         var createExampleStoryOutboxMessage = new CreateExampleStoryOutboxMessage
         {
-            StoryInfoVersionId = storyInfoVersion.Id.Value,
-            Locale = request.Locale
+            StoryInfoVersionId = storyInfoVersion.Id.Value
         };
 
         var outboxMessage = new OutboxMessage

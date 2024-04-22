@@ -8,5 +8,8 @@ public sealed class UpdateFragmentRequestValidator : AbstractValidator<UpdateFra
     {
         RuleFor(r => r.Body)
             .Length(0, FragmentConstants.BodyMaxLength);
+        
+        RuleFor(r => r.Name)
+            .Length(0, FragmentConstants.NameMaxLength);
     }
 }

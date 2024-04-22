@@ -46,12 +46,14 @@ public sealed class BranchRepository(
         var fromFragmentDto = new FragmentDto
         {
             Id = branch.FromFragment.Id.Value.ToString(),
+            Name = branch.FromFragment.Name,
             Body = branch.FromFragment.Body
         };
 
         var toFragmentDto = new FragmentDto
         {
             Id = branch.ToFragment.Id.Value.ToString(),
+            Name = branch.ToFragment.Name,
             Body = branch.ToFragment.Body
         };
 

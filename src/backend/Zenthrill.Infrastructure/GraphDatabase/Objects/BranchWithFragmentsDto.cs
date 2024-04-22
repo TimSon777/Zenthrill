@@ -1,5 +1,3 @@
-using Zenthrill.Infrastructure.Repositories;
-
 namespace Zenthrill.Infrastructure.GraphDatabase.Objects;
 
 public sealed class BranchWithFragmentsDto

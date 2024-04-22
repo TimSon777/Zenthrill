@@ -20,7 +20,7 @@ public sealed class ExampleStoryVersionCreatorCallback(
         var storyInfoVersion = await applicationDbContext.StoryInfoVersions
             .FirstAsync(siv => siv.Id == request.StoryInfoVersionId, cancellationToken);
 
-        var story = CreateStoryVersion(storyInfoVersion, request.Locale);
+        var story = CreateStoryVersion(storyInfoVersion);
 
         var branches = story.TraverseBranches();
 
@@ -34,28 +34,32 @@ public sealed class ExampleStoryVersionCreatorCallback(
         }, cancellationToken);
     }
     
-    private StoryVersion CreateStoryVersion(StoryInfoVersion storyInfoVersion, Locale locale)
+    private StoryVersion CreateStoryVersion(StoryInfoVersion storyInfoVersion)
     {
-        var localizer = localizerFactory.CreateLocalizer(locale);
+        var localizer = localizerFactory.CreateLocalizer(Locale.ruRU);
 
         var entrypoint = new Fragment(storyInfoVersion.EntrypointFragmentId!.Value)
         {
+            Name = localizer.ExampleStoryEntrypointName(),
             IsEntrypoint = true,
             Body = localizer.ExampleStoryEntrypointBody()
         };
 
         var fragment1 = new Fragment
         {
+            Name = localizer.ExampleStoryFragment1Name(),
             Body = localizer.ExampleStoryFragment1Body()
         };
 
         var fragment2 = new Fragment
         {
+            Name = localizer.ExampleStoryFragment2Name(),
             Body = localizer.ExampleStoryFragment2Body()
         };
 
         var fragment3 = new Fragment
         {
+            Name = localizer.ExampleStoryFragment3Name(),
             Body = localizer.ExampleStoryFragment3Body()
         };
 

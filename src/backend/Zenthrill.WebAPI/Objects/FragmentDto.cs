@@ -7,4 +7,6 @@ public sealed class FragmentDto
     public required bool IsEntrypoint { get; set; }
 
     public required string Body { get; set; }
+    
+    public required string Name { get; set; }
 }

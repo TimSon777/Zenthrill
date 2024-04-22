@@ -1,6 +1,6 @@
 using Zenthrill.Application.Repositories;
 
-namespace Zenthrill.Infrastructure.Repositories;
+namespace Zenthrill.Infrastructure.GraphDatabase.Repositories;
 
 public sealed class RepositoryRegistry(
     IFragmentRepository fragmentRepository,

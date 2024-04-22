@@ -16,19 +16,14 @@ public sealed class CreateStoryVersionRequestValidator : AbstractValidator<Creat
         RuleFor(request => request.Version)
             .CustomAsync(async (version, context, ct) =>
             {
-                if (context.RootContextData["BaseVersion"] is not StoryInfoVersion storyInfoVersion)
-                {
-                    throw new InvalidOperationException("Context must contain base_version.");
-                }
-
                 if (version.Major <= 0)
                 {
                     context.AddFailure("Version.Major must be greater then 0.");
                 }
 
-                if (version.Minor <= 0)
+                if (version.Minor < 0)
                 {
-                    context.AddFailure("Version.Minor must be greater then 0.");
+                    context.AddFailure("Version.Minor must be greater or equal 0.");
                 }
 
                 if (string.IsNullOrWhiteSpace(version.Suffix))
@@ -37,6 +32,17 @@ public sealed class CreateStoryVersionRequestValidator : AbstractValidator<Creat
                     return;
                 }
 
+                if (!context.RootContextData.TryGetValue("BaseVersion", out var value))
+                {
+                    return;
+                }
+                
+                if (value is not StoryInfoVersion storyInfoVersion)
+                {
+                    return;
+                }
+
+                Console.WriteLine();
                 var sameVersionExists = await applicationDbContext.StoryInfoVersions
                     .AnyAsync(siv =>
                             siv.StoryInfoId == storyInfoVersion.StoryInfoId
