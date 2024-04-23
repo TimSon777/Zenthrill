@@ -1,2 +1,3 @@
 CREATE DATABASE story;
 CREATE DATABASE auth;
+CREATE DATABASE user_story;

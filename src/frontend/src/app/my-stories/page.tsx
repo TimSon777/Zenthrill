@@ -4,12 +4,15 @@ import getStories from "./getStories";
 import { useDisclosure } from "@mantine/hooks";
 import {Button, Card, Loader, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { IStoryInfo } from '@/app/types';
+import { IStoryInfo, ITag } from '@/app/types';
 import AddStoryModal from "./components/AddStoryModal";
 import Link from "next/link";
+import getTags from "@/app/api/getTags";
 
 const StoriesPage = () => {
     const [stories, setStories] = useState<IStoryInfo[] | null>(null);
+    const [tags, setTags] = useState<ITag[] | null>(null);
+    
     const [opened, { open, close }] = useDisclosure();
 
     useEffect(() => {
@@ -18,10 +21,16 @@ const StoriesPage = () => {
             setStories(data);
         };
 
+        const fetchTags = async () => {
+            const data = await getTags();
+            setTags(data);
+        }
+        
         fetchStories();
+        fetchTags();
     }, []);
 
-    if (!stories) {
+    if (!stories || !tags) {
         return <Loader />
     }
 
@@ -51,7 +60,10 @@ const StoriesPage = () => {
                 ))}
             </Stack>
 
-            <AddStoryModal opened={opened} close={close} />
+            <AddStoryModal
+                opened={opened}
+                close={close}
+                tags={tags} />
         </>
     );
 }

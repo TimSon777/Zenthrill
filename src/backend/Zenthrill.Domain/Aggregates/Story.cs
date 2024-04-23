@@ -9,4 +9,6 @@ public sealed class Story
     public required string Description { get; set; }
     
     public required IReadOnlyCollection<StoryInfoVersion> Versions { get; set; }
+    
+    public required IReadOnlyCollection<Tag> Tags { get; set; }
 }

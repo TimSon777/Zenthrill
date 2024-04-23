@@ -49,7 +49,8 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
         return new CreateStoryRequest
         {
             Description = request.Description,
-            User = userMapper.MapToApplicationUser(user)
+            User = userMapper.MapToApplicationUser(user),
+            TagIds = request.TagIds.Select(id => new TagId(id))
         };
     }
 
@@ -107,7 +108,8 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
                 Fragments = c.TraverseFragments().Select(MapToFragmentDto)
             }),
             Version = MapToVersionDto(storyVersion.StoryInfoVersion.Version),
-            Id = storyVersion.StoryInfoVersion.Id.Value
+            Id = storyVersion.StoryInfoVersion.Id.Value,
+            EntrypointFragmentId = storyVersion.StoryInfoVersion.EntrypointFragmentId?.Value
         };
     }
 
@@ -125,6 +127,11 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
                 Id = v.Id.Value,
                 Name = v.Name,
                 Version = MapToVersionDto(v.Version)
+            }),
+            Tags = story.Tags.Select(t => new TagDto
+            {
+                Id = t.Id.Value,
+                Name = t.Name
             })
         };
     }

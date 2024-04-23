@@ -14,7 +14,6 @@ public sealed class UserMapper : IUserMapper
         return new User
         {
             Id = new UserId(),
-            UserName = principal.Identity?.Name ?? throw new InvalidOperationException("Can't retrieve user name."),
             Roles = new List<string>()
         };
     }

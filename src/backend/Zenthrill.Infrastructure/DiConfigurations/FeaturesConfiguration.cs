@@ -10,6 +10,7 @@ using Zenthrill.Application.Features.Stories.ExampleVersionCreate;
 using Zenthrill.Application.Features.Stories.List;
 using Zenthrill.Application.Features.Stories.Read;
 using Zenthrill.Application.Features.Stories.ReadVersion;
+using Zenthrill.Application.Features.Tags.List;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -22,7 +23,8 @@ public static class FeaturesConfiguration
             .AddScoped<IStoryVersionCreator, StoryVersionCreator>()
             .AddScoped<IStoryReader, StoryReader>()
             .AddScoped<IStoryListReader, StoryListReader>()
-            .AddScoped<IFragmentEntrypointMarker, FragmentEntrypointMarker>();
+            .AddScoped<IFragmentEntrypointMarker, FragmentEntrypointMarker>()
+            .AddScoped<ITagListReader, TagListReader>();
 
         return services;
     }

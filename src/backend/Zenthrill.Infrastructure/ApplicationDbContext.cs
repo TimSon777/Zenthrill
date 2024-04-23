@@ -6,13 +6,9 @@ using Zenthrill.Outbox.Core;
 
 namespace Zenthrill.Infrastructure;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : DbContext(options), IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -21,6 +17,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<StoryInfo> StoryInfos => Set<StoryInfo>();
 
     public DbSet<StoryInfoVersion> StoryInfoVersions => Set<StoryInfoVersion>();
+    
+    public DbSet<Tag> Tags => Set<Tag>();
 
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 

@@ -3,10 +3,8 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["Zenthrill.DbMigrator/Zenthrill.DbMigrator.csproj", "Zenthrill.DbMigrator/"]
-COPY ["Zenthrill.Migrations/Zenthrill.Migrations.csproj", "Zenthrill.Migrations/"]
-RUN dotnet restore "Zenthrill.DbMigrator/Zenthrill.DbMigrator.csproj"
 COPY . .
+RUN dotnet restore "Zenthrill.DbMigrator/Zenthrill.DbMigrator.csproj"
 WORKDIR "/src/Zenthrill.DbMigrator"
 RUN dotnet build "Zenthrill.DbMigrator.csproj" -c Release -o /app/build
 
