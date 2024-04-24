@@ -10,10 +10,11 @@ public sealed class StoryRootQuery
     [UseFiltering]
     public IQueryable<StoryInfo> GetStoryInfos(
         [Service] IApplicationDbContext applicationDbContext,
-        ICollection<Guid> tagIds)
+        IEnumerable<Guid> tagIds)
     {
         IQueryable<StoryInfo> query = applicationDbContext.StoryInfos
-            .Include(si => si.Tags);
+            .Include(si => si.Tags)
+            .Include(si => si.Versions);
 
         return tagIds.Aggregate(query, (current, tagId) =>
             current.Where(si => si.Tags.Any(tag => tag.Id == new TagId(tagId))));

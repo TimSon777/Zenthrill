@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Zenthrill.UserStory.Model.Clients;
 using Zenthrill.UserStory.Model.Infrastructure.EntityFrameworkCore;
 using Zenthrill.UserStory.Model.Services;
 
@@ -11,6 +12,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserProcessor, UserProcessor>();
 builder.Services.AddScoped<IStoryRuntime, StoryRuntime>();
+builder.Services.AddSingleton<IStoryClient, StoryClient>();
+
+builder.Services.AddCors(options =>
+    options.AddPolicy("Frontend",
+        b => b.AllowAnyMethod()
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .WithOrigins("http://localhost:3000")));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DATABASE")));
@@ -22,6 +31,7 @@ builder.Services.AddHttpClient("Story", options =>
 
 var app = builder.Build();
 
+app.UseCors("Frontend");
 app.UseSwagger();
 app.UseSwaggerUI();
 

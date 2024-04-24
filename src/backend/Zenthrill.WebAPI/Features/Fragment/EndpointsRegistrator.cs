@@ -18,6 +18,9 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
             .MapPut("/fragments/entrypoint", MarkEntrypoint.Endpoint.Mark)
             .RequireAuthorization();
 
+        builder
+            .MapGet("/story-versions/{storyInfoVersionId}/fragments/{fragmentId}", Read.Endpoint.Read);
+        
         return builder;
     }
 }

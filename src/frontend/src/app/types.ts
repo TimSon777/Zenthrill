@@ -90,3 +90,18 @@ export interface ITag {
     id: string;
     name: string;
 }
+
+export interface IFragmentForUser {
+    fragment?: {
+        name: string;
+        body: string;
+    }
+    outputBranches?: [
+        {
+            id: string;
+            inscription: string;
+            fromFragmentId: string;
+            toFragmentId: string;
+        }
+    ]
+}

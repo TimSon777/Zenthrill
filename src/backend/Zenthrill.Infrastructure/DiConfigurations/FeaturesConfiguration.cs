@@ -3,6 +3,7 @@ using Zenthrill.Application.Features.Branches.Update;
 using Zenthrill.Application.Features.Files.GetUploadLink;
 using Zenthrill.Application.Features.Fragments.Create;
 using Zenthrill.Application.Features.Fragments.MarkEntrypoint;
+using Zenthrill.Application.Features.Fragments.Read;
 using Zenthrill.Application.Features.Fragments.Update;
 using Zenthrill.Application.Features.Stories.Create;
 using Zenthrill.Application.Features.Stories.CreateVersion;
@@ -24,7 +25,8 @@ public static class FeaturesConfiguration
             .AddScoped<IStoryReader, StoryReader>()
             .AddScoped<IStoryListReader, StoryListReader>()
             .AddScoped<IFragmentEntrypointMarker, FragmentEntrypointMarker>()
-            .AddScoped<ITagListReader, TagListReader>();
+            .AddScoped<ITagListReader, TagListReader>()
+            .AddScoped<IFragmentReader, FragmentReader>();
 
         return services;
     }

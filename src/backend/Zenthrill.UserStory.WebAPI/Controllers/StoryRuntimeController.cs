@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Zenthrill.APIResponses;
 using Zenthrill.UserStory.Model.Dto;
 using Zenthrill.UserStory.Model.Services;
 using ExecuteStepRequest = Zenthrill.UserStory.WebAPI.Requests.ExecuteStepRequest;
@@ -11,8 +12,9 @@ public sealed class StoryRuntimeController(
     IStoryRuntime storyRuntime) : ControllerBase
 {
     [HttpPost]
-    public async Task<ExecuteStepResponse> ExecuteStepAsync(ExecuteStepRequest request, CancellationToken cancellationToken)
+    public async Task<ApiResponse> ExecuteStepAsync([FromBody] ExecuteStepRequest request, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"A{request.StoryInfoVersionId}");
         var applicationRequest = new Model.Dto.ExecuteStepRequest
         {
             StoryInfoVersionId = request.StoryInfoVersionId,
@@ -20,6 +22,8 @@ public sealed class StoryRuntimeController(
             User = await userProcessor.ProcessUserAsync(HttpContext.User, HttpContext.Request.Headers.UserAgent!, cancellationToken)
         };
 
-        return await storyRuntime.ExecuteStepAsync(applicationRequest, cancellationToken);
+        var response = await storyRuntime.ExecuteStepAsync(applicationRequest, cancellationToken);
+
+        return ApiResponses.Success(response);
     }
 }

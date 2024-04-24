@@ -1,6 +1,5 @@
-using System.Net.Http.Json;
-using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Zenthrill.UserStory.Model.Clients;
 using Zenthrill.UserStory.Model.Dto;
 using Zenthrill.UserStory.Model.Entities;
 using Zenthrill.UserStory.Model.Infrastructure.EntityFrameworkCore;
@@ -14,19 +13,12 @@ public interface IStoryRuntime
 }
 
 public sealed class StoryRuntime(
-    IHttpClientFactory httpClientFactory,
+    IStoryClient storyClient,
     ApplicationDbContext applicationDbContext) : IStoryRuntime
 {
     public async Task<ExecuteStepResponse> ExecuteStepAsync(ExecuteStepRequest request, CancellationToken cancellationToken)
     {
-        var httpClient = httpClientFactory.CreateClient("Story");
-         var x = await httpClient.GetAsync(
-             $"story-versions/{request.StoryInfoVersionId}",
-             cancellationToken);
-         var y = await x.Content.ReadAsStringAsync();
-        var response = await httpClient.GetFromJsonAsync<Response>(
-            $"story-versions/{request.StoryInfoVersionId}",
-            cancellationToken);
+        var response = await storyClient.GetStoryVersionAsync(request.StoryInfoVersionId, cancellationToken);
 
         var existedStory = await applicationDbContext.Stories
             .FirstOrDefaultAsync(
@@ -89,21 +81,3 @@ public sealed class StoryRuntime(
     }
 }
 
-file sealed class Response
-{
-    public required Value Value { get; set; }
-}
-
-file sealed class Value
-{
-    public required Guid EntrypointFragmentId { get; set; }
-    
-    public required IEnumerable<ComponentDto> Components { get; set; }
-}
-
-file sealed class ComponentDto
-{
-    public required IEnumerable<FragmentDto> Fragments { get; set; }
-
-    public required IEnumerable<BranchDto> Branches { get; set; }
-}
