@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Zenthrill.Migrations\Zenthrill.Migrations.csproj" />
+      <ProjectReference Include="..\Zenthrill.UserStory.Migrations\Zenthrill.UserStory.Migrations.csproj" />
     </ItemGroup>
 
     <ItemGroup>

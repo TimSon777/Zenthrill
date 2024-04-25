@@ -8,12 +8,11 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
     public IEndpointRouteBuilder Register(IEndpointRouteBuilder builder)
     {
         builder
-            .MapGet("/story-versions/{id}", ReadVersion.Endpoint.ReadVersion)
-            .RequireAuthorization();
+            .MapGet("/story-versions/{id}", ReadVersion.Endpoint.ReadVersion);
         
         builder
             .MapPost("/stories", Create.Endpoint.Create)
-            .RequireAuthorization();;
+            .RequireAuthorization();
 
         builder
             .MapPost("/story-versions/example", Endpoint.CreateExampleVersion)

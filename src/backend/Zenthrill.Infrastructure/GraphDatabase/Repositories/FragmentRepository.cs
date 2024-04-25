@@ -10,6 +10,28 @@ public sealed class FragmentRepository(
     BoltGraphClient boltGraphClient,
     ILabelsConverter labelsConverter) : IFragmentRepository
 {
+    public async Task<Fragment?> TryGetAsync(FragmentId fragmentId, CancellationToken ct)
+    {
+        var results = await boltGraphClient.Cypher
+            .Where("fragment.Id = $fragmentId")
+            .WithParam("fragmentId", fragmentId.Value.ToString())
+            .Return<FragmentDto>("fragment")
+            .ResultsAsync;
+
+        var result = results.SingleOrDefault();
+
+        if (result is null)
+        {
+            return null;
+        }
+
+        return new Fragment(new FragmentId(Guid.Parse(result.Id)))
+        {
+            Name = result.Name,
+            Body = result.Body
+        };
+    }
+
     public async Task<Fragment?> TryGetAsync(FragmentId fragmentId, StoryInfoVersionId storyInfoVersionId, CancellationToken ct)
     {
         var label = labelsConverter.Convert(storyInfoVersionId);

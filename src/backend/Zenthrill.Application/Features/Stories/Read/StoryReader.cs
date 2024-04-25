@@ -16,6 +16,7 @@ public sealed class StoryReader(IApplicationDbContext applicationDbContext) : IS
     {
         var storyInfo = await applicationDbContext.StoryInfos
             .Include(si => si.Versions)
+            .Include(si => si.Tags)
             .FirstOrDefaultAsync(StoryInfo.ById(request.StoryInfoId), cancellationToken);
 
         if (storyInfo is null)
@@ -32,7 +33,8 @@ public sealed class StoryReader(IApplicationDbContext applicationDbContext) : IS
         {
             Description = storyInfo.Description,
             Versions = storyInfo.Versions.ToList(),
-            StoryInfoId = storyInfo.Id
+            StoryInfoId = storyInfo.Id,
+            Tags = storyInfo.Tags
         };
     }
 }

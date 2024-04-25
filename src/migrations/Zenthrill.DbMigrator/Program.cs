@@ -1,7 +1,9 @@
-﻿using FluentMigrator.Runner;
+﻿using System.Reflection;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zenthrill.Migrations.Migrations.Main;
+using Zenthrill.UserStory.Migrations.Migrations;
 
 var currentDirectory = Directory.GetCurrentDirectory();
 
@@ -23,10 +25,22 @@ var serviceProvider = new ServiceCollection()
     .ConfigureRunner(rb => rb
         .AddPostgres()
         .WithGlobalConnectionString(connectionString)
-        .ScanIn(typeof(AddStoryTables).Assembly).For.Migrations())
+        .ScanIn(GetMigrationSourceAssembly()).For.Migrations())
     .AddLogging(lb => lb.AddFluentMigratorConsole())
     .BuildServiceProvider();
 
 var migrationRunner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
 migrationRunner.MigrateUp();
+
+return;
+
+Assembly GetMigrationSourceAssembly()
+{
+    return configuration["MIGRATION_SOURCE"] switch
+    {
+        "Story" => typeof(AddStoryTables).Assembly,
+        "UserStory" => typeof(Initial).Assembly,
+        _ => throw new ArgumentOutOfRangeException()
+    };
+}

@@ -32,7 +32,6 @@ public sealed class IdentityProviderClient(
         return new User
         {
             Id = new UserId(userDto.Id),
-            UserName = userDto.UserName,
             Roles = userDto.Roles.ToList()
         };
     }

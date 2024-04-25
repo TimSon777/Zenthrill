@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using Zenthrill.Application;
 using Zenthrill.WebAPI.Extensions;
+using Zenthrill.WebAPI.GraphQL.Schema.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,12 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 {
     o.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<StoryRootQuery>()
+    .AddFiltering()
+    .AddSorting();
 
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 {
@@ -46,6 +52,9 @@ var app = builder.Build();
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGraphQL();
+app.MapBananaCakePop();
+
 app.UseApi(typeof(Zenthrill.WebAPI.AssemblyInfo).Assembly);
 
 app.UseSwagger();

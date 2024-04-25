@@ -12,6 +12,8 @@ public interface IApplicationDbContext
     DbSet<OutboxMessage> OutboxMessages { get; }
 
     DbSet<StoryInfoVersion> StoryInfoVersions { get; }
+    
+    DbSet<Tag> Tags { get; }
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

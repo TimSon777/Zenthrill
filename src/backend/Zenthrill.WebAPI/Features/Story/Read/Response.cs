@@ -7,4 +7,6 @@ public sealed class Response
     public required StoryInfoDto StoryInfo { get; set; }
 
     public required IEnumerable<StoryVersionDto> Versions { get; set; }
+    
+    public required IEnumerable<TagDto> Tags { get; set; }
 }

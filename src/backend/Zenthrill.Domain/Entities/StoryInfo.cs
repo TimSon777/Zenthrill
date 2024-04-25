@@ -16,6 +16,8 @@ public sealed class StoryInfo : Entity<StoryInfoId>
 
     public required string Description { get; set; }
 
+    public List<Tag> Tags { get; set; } = default!;
+
     public StoryInfo()
     {
         Id = StoryInfoId.New();

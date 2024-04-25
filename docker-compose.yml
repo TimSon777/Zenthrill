@@ -15,6 +15,20 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
 
+  user_story:
+    build:
+      context: .
+      dockerfile: ./src/backend/Zenthrill.UserStory.WebAPI/Dockerfile
+    ports:
+      - 8082:80
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+
   story_consumer:
     build:
       context: .
@@ -69,6 +83,20 @@ services:
     environment:
       - DOTNET_ENVIRONMENT=${ENVIRONMENT}
       - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${STORY_DB_NAME}
+      - MIGRATION_SOURCE=Story
+
+  user_story_migrator:
+    build:
+      context: ./src/migrations
+      dockerfile: ./Zenthrill.DbMigrator/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+    environment:
+      - DOTNET_ENVIRONMENT=${ENVIRONMENT}
+      - DATABASE_CONNECTION_STRING=Host=db;Port=${DB_INTERNAL_PORT};User ID=${DB_USER};Password=${DB_PASSWORD};Database=${USER_STORY_DB_NAME}
+      - MIGRATION_SOURCE=UserStory
 
   auth_migrator:
     build:

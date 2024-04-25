@@ -5,7 +5,7 @@ import getStory from "./getStory";
 import { IStory } from "@/app/types";
 import AddVersionModal from "./components/AddVersionModal";
 import { useDisclosure } from "@mantine/hooks";
-import { Button, Card, Center, Divider, Space, Stack, Text } from "@mantine/core";
+import {Badge, Button, Card, Center, Divider, Group, Space, Stack, Text } from "@mantine/core";
 import Link from "next/link";
 import { versionToString } from "@/app/helpers";
 
@@ -51,6 +51,18 @@ const StoryPage = (params: { params: { storyId: string } }) => {
         )
     };
     
+    function getTagsBody() {
+        return (
+            <Group>
+                {story!.tags.map((tag) => (
+                    <Badge key={tag.id} variant="outline">
+                        {tag.name}
+                    </Badge>
+                ))}
+            </Group>
+        )
+    }
+    
     return (
         <>
             <div>
@@ -58,6 +70,10 @@ const StoryPage = (params: { params: { storyId: string } }) => {
                     <Text fw={700}>Описание истории</Text>
                     <Divider mb={'10px'}/>
                     <Text>{story.storyInfo.description}</Text>
+                    <Space h={'md'} />
+                    <Text fw={700}>Теги</Text>
+                    <Divider mb={'10px'}/>
+                    {getTagsBody()}
                 </Card>
                 <Space h={'md'} />
                 <Stack>

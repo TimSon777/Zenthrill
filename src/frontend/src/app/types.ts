@@ -9,6 +9,7 @@ export interface IStoryVersionInfo {
     version: IVersion;
 }
 export interface IStory {
+    tags: ITag[];
     storyInfo: IStoryInfo;
     versions: IStoryVersionInfo[];
 }
@@ -78,4 +79,29 @@ export interface IUpdateFragmentRequest {
     body: string;
     name: string;
     fragmentId: string;
+}
+
+export interface ICreateStoryRequest {
+    description: string;
+    tagIds: string[];
+}
+
+export interface ITag {
+    id: string;
+    name: string;
+}
+
+export interface IFragmentForUser {
+    fragment?: {
+        name: string;
+        body: string;
+    }
+    outputBranches?: [
+        {
+            id: string;
+            inscription: string;
+            fromFragmentId: string;
+            toFragmentId: string;
+        }
+    ]
 }
