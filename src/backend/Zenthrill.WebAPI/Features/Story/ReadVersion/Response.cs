@@ -16,4 +16,8 @@ public sealed class Response
     public required Guid Id { get; set; }
     
     public required Guid? EntrypointFragmentId { get; set; }
+
+    public required bool IsPublished { get; set; }
+    
+    public required Guid? EntrypointId { get; set; }
 }

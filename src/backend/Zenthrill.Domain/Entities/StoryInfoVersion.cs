@@ -28,6 +28,8 @@ public sealed class StoryInfoVersion : Entity<StoryInfoVersionId>
 
     public bool IsBaseVersion => SubVersions.Any();
 
+    public required bool IsPublished { get; set; }
+
     public StoryInfoVersion()
     {
         Id = StoryInfoVersionId.New();

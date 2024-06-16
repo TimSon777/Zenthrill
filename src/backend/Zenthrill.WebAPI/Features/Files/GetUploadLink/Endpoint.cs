@@ -7,7 +7,7 @@ namespace Zenthrill.WebAPI.Features.Files.GetUploadLink;
 public static class Endpoint
 {
     public static async Task<IResult> GetUploadLink(
-        [FromBody] Request request,
+        [AsParameters] Request request,
         IFileLinkUploadConstructor fileLinkUploadConstructor,
         IMapper mapper,
         HttpContext httpContext,

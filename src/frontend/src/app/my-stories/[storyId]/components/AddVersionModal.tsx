@@ -1,11 +1,10 @@
 'use client';
 
 import React from 'react';
-import { Modal, Button, TextInput, NumberInput, Group, Select, Space, Center } from '@mantine/core';
+import { Modal, Button, TextInput, NumberInput, Select, Space, Center } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import addVersion from '../addVersion';
 import { IStoryVersionInfo, ICreateVersionRequest } from '@/app/types';
-import { useRouter } from 'next/navigation';
 import { versionToString } from '@/app/helpers';
 import ModalTitle from '@/app/components/ModalTitle';
 
@@ -14,18 +13,16 @@ interface IProps {
     storyId: string;
     opened: boolean;
     close: () => void;
+    onVersionAdded: () => void;
 }
 
-const RequestModal = ({ versions, storyId, opened, close }: IProps) => {
-    const router = useRouter();
+const RequestModal = ({ versions, storyId, opened, close, onVersionAdded }: IProps) => {
 
-    // Сформируем данные для выпадающего списка версий
     const versionOptions = versions.map((version) => ({
         label: `${versionToString(version.version)} ${version.name}`,
         value: version.id,
     }));
 
-    // Инициализация формы с начальными значениями
     const form = useForm<ICreateVersionRequest>({
         initialValues: {
             storyInfoId: storyId,
@@ -39,18 +36,15 @@ const RequestModal = ({ versions, storyId, opened, close }: IProps) => {
         },
     });
 
-    // Обработчик добавления версии
     const handleAddVersion = async () => {
-        const versionId = await addVersion(form.values);
-        router.push(`/my-stories/${storyId}/versions/${versionId}`);
+        await addVersion(form.values);
+        onVersionAdded();
         close();
     };
 
-    // Обработчик изменения selectedVersion в форме
     const handleSelectVersion = (value: string | null) => {
         if (value === null) {
             form.setFieldValue('baseStoryInfoVersionId', '');
-            // Очистка значений версии формы
             form.setFieldValue('version.major', 0);
             form.setFieldValue('version.minor', 0);
             form.setFieldValue('version.suffix', '');

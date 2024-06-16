@@ -18,6 +18,7 @@ public sealed class AddStoryTables : ForwardOnlyMigration
             .WithColumn("Version").AsString().NotNullable()
             .WithColumn("Name").AsString()
             .WithColumn("EntrypointFragmentId").AsGuid().Nullable()
-            .WithColumn("BaseVersionId").AsGuid().Nullable().ForeignKey("StoryInfoVersions", "Id");
+            .WithColumn("BaseVersionId").AsGuid().Nullable().ForeignKey("StoryInfoVersions", "Id")
+            .WithColumn("IsPublished").AsBoolean().NotNullable();
     }
 }

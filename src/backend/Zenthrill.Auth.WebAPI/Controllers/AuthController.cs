@@ -61,7 +61,6 @@ public sealed class AuthController(
         }
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-
     }
     
     private IEnumerable<string> GetDestinations(ClaimsPrincipal principal, Claim claim)

@@ -37,7 +37,7 @@ public sealed class FileLinkUploadConstructor(
             return new ValidationFailure(result.ToDictionary());
         }
         
-        var key = $"{storyInfo.Id}/{Guid.NewGuid():N}.{request.Extension}";
+        var key = $"{storyInfo.Id}/{request.FileName}";
 
         return await fileService.GetLinkForUploadAsync(key, cancellationToken);
     }

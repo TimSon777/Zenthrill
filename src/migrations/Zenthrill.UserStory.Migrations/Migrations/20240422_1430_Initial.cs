@@ -14,7 +14,7 @@ public sealed class Initial : ForwardOnlyMigration
         Create
             .Table("Stories")
             .WithColumn("Id").AsGuid().PrimaryKey()
-            .WithColumn("UserId").AsGuid().ForeignKey().Indexed()
+            .WithColumn("UserId").AsGuid().ForeignKey("Users", "Id").Indexed()
             .WithColumn("ExecutionContext").AsString().NotNullable()
             .WithColumn("StoryInfoVersionId").AsGuid().NotNullable();
     }

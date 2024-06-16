@@ -155,6 +155,7 @@ services:
       - EDGE_PORT=4566
       - DATA_DIR=/tmp/localstack/data
       - CLEAR_TMP_FOLDER=0
+      - DISABLE_CORS_CHECKS=1
     volumes:
       - ./volumes/.localstack:/tmp/localstack
       -  ./create-resources.sh:/etc/localstack/init/ready.d/create-resources.sh

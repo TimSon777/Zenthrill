@@ -7,7 +7,7 @@ public sealed class EndpointsRegistrator : IEndpointsRegistrator
     public IEndpointRouteBuilder Register(IEndpointRouteBuilder builder)
     {
         builder
-            .MapPut("/files/upload-link", GetUploadLink.Endpoint.GetUploadLink)
+            .MapGet("/files/upload-link", GetUploadLink.Endpoint.GetUploadLink)
             .RequireAuthorization();
 
         return builder;

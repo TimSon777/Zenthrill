@@ -15,7 +15,7 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
     {
         return new GetUploadLinkRequest
         {
-            Extension = request.Extension,
+            FileName = request.FileName,
             StoryInfoId = new StoryInfoId(request.StoryInfoId),
             User = userMapper.MapToApplicationUser(principal)
         };

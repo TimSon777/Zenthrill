@@ -92,9 +92,9 @@ public sealed class FragmentRepository(
         };
 
         await boltGraphClient.Cypher
-            .Match($"(fragment:{label})") // Используйте label для идентификации типа узла
-            .Where("fragment.Id = $fragmentId") // Используйте параметр для идентификатора узла
-            .Set("fragment = $fragmentDto") // Обновите поля узла, используя DTO
+            .Match($"(fragment:{label})")
+            .Where("fragment.Id = $fragmentId")
+            .Set("fragment = $fragmentDto")
             .WithParams(new
             {
                 fragmentId,

@@ -26,7 +26,8 @@ public sealed class ExampleStoryVersionCreator(
             EntrypointFragmentId = FragmentId.New(),
             Name = localizer.ExampleStoryName(),
             Version = StoryVersion.FirstVersion,
-            StoryInfoId = request.StoryInfoId
+            StoryInfoId = request.StoryInfoId,
+            IsPublished = false
         };
 
         applicationDbContext.StoryInfoVersions

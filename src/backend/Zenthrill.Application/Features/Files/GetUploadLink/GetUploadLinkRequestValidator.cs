@@ -6,7 +6,7 @@ public sealed class GetUploadLinkRequestValidator : AbstractValidator<GetUploadL
 {
     public GetUploadLinkRequestValidator()
     {
-        RuleFor(r => r.Extension)
-            .Length(0, 10);
+        RuleFor(r => r.FileName)
+            .Length(0, 100);
     }
 }

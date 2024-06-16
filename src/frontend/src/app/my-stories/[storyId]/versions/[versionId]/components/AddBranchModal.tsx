@@ -26,7 +26,7 @@ const AddBranchModal = ({ opened, close, storyInfoVersionId, onStoryChanged, fra
     });
 
     const fragmentOptions = useMemo(() => fragments.map(f => ({
-        label: f.body,
+        label: f.name,
         value: f.id
     })), [fragments]);
 

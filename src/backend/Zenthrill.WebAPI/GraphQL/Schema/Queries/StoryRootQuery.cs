@@ -14,7 +14,8 @@ public sealed class StoryRootQuery
     {
         IQueryable<StoryInfo> query = applicationDbContext.StoryInfos
             .Include(si => si.Tags)
-            .Include(si => si.Versions);
+            .Include(si => si.Versions
+                .Where(siv => siv.EntrypointFragmentId != null && siv.IsPublished));
 
         return tagIds.Aggregate(query, (current, tagId) =>
             current.Where(si => si.Tags.Any(tag => tag.Id == new TagId(tagId))));

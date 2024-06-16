@@ -98,7 +98,7 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
         {
             StoryInfo = new StoryInfoDto
             {
-                Id = storyVersion.StoryInfoVersion.Id.Value,
+                Id = storyVersion.StoryInfoVersion.StoryInfo.Id.Value,
                 Description = storyVersion.StoryInfoVersion.StoryInfo.Description
             },
             Name = storyVersion.StoryInfoVersion.Name,
@@ -109,7 +109,9 @@ public sealed class Mapper(IUserMapper userMapper) : IMapper
             }),
             Version = MapToVersionDto(storyVersion.StoryInfoVersion.Version),
             Id = storyVersion.StoryInfoVersion.Id.Value,
-            EntrypointFragmentId = storyVersion.StoryInfoVersion.EntrypointFragmentId?.Value
+            EntrypointFragmentId = storyVersion.StoryInfoVersion.EntrypointFragmentId?.Value,
+            IsPublished = storyVersion.StoryInfoVersion.IsPublished,
+            EntrypointId = storyVersion.Components.SelectMany(x => x.TraverseFragments()).FirstOrDefault(x => x.IsEntrypoint)?.Id.Value
         };
     }
 

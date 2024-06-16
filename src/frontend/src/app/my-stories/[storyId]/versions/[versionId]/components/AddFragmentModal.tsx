@@ -41,24 +41,28 @@ const AddFragmentModal = ({ opened, close, fromFragmentId, storyInfoVersionId, o
                 opened={opened}
                 onClose={close}
                 title={<ModalTitle>Добавление нового фрагмента</ModalTitle>}
+                size={'xl'}
             >
+                <TextInput
+                    label="Название фрагмента"
+                    placeholder="Введите название фрагмента"
+                    onChange={(event) => setName(event.currentTarget.value)}
+                    value={name}
+                    mt="sm"
+                />
+                
                 <Textarea
-                    label="Описание истории"
-                    placeholder="Введите описание новой истории"
+                    label="Текст фрагмента"
+                    placeholder="Введите текст фрагмента"
                     onChange={(event) => setBody(event.currentTarget.value)}
                     value={body}
                     autosize
                     minRows={3}
                     mt="sm"
                 />
-                <TextInput
-                    label="Название истории"
-                    placeholder="Введите описание новой истории"
-                    onChange={(event) => setName(event.currentTarget.value)}
-                    value={name}
-                    mt="sm"
-                />
+
                 <Space h="md" />
+                
                 <Center>
                     <Button onClick={handleAddFragment}>
                         Добавить

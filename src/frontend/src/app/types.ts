@@ -39,6 +39,8 @@ export interface IStoryVersion {
     name: string;
     version: IVersion;
     id: string;
+    isPublished: boolean;
+    entrypointId: string | null;
 }
 
 export interface IVersion {

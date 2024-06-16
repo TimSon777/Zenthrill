@@ -22,7 +22,7 @@ const VersionGraph = ({ storyVersion, onStoryChanged }: IProps) => {
     const fragments = useMemo(() => storyVersion.components.flatMap(comp => comp.fragments), [storyVersion.components]);
     const elements = [
         ...fragments.map(fragment => ({
-            data: { id: fragment.id, label: fragment.name }
+            data: { id: fragment.id, label: fragment.name, isEntrypoint: fragment.isEntrypoint ? 1 : 0 }
         })),
 
         ...branches.map(branch => ({
@@ -48,6 +48,12 @@ const VersionGraph = ({ storyVersion, onStoryChanged }: IProps) => {
                 'border-width': 2,
                 'width': 120,
                 'height': 120
+            }
+        },
+        {
+            selector: 'node[isEntrypoint>0]',
+            style: {
+                'background-color': '#00FF00'
             }
         },
         {
@@ -129,7 +135,9 @@ const VersionGraph = ({ storyVersion, onStoryChanged }: IProps) => {
                     close={handleFragmentClose}
                     fragment={selectedFragment}
                     onStoryChanged={onStoryChanged}
-                    storyInfoVersionId={storyVersion.id} />}
+                    storyInfoVersionId={storyVersion.id}
+                    storyInfoId={storyVersion.storyInfo.id}
+                />}
         </>
     );
 };

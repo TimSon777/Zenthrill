@@ -8,5 +8,5 @@ public sealed class GetUploadLinkRequest
     
     public required User User { get; set; }
 
-    public required string Extension { get; set; }
+    public required string FileName { get; set; }
 }

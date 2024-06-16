@@ -71,7 +71,8 @@ public sealed class StoryVersionCreator(
             Name = request.Name,
             StoryInfo = storyInfo,
             Version = StoryVersion.Create(request.Version.Major, request.Version.Minor, request.Version.Suffix).AsT0,
-            BaseVersion = baseVersion
+            BaseVersion = baseVersion,
+            IsPublished = false
         };
 
         if (baseVersion is not null)

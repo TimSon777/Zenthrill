@@ -5,11 +5,14 @@ import getStory from "./getStory";
 import { IStory } from "@/app/types";
 import AddVersionModal from "./components/AddVersionModal";
 import { useDisclosure } from "@mantine/hooks";
-import {Badge, Button, Card, Center, Divider, Group, Space, Stack, Text } from "@mantine/core";
+import { Badge, Button, Card, Center, Divider, Group, Loader, Space, Stack, Text } from "@mantine/core";
 import Link from "next/link";
 import { versionToString } from "@/app/helpers";
+import { v4 as uuidv4 } from 'uuid';
+import Files from "./components/Files";
 
 const StoryPage = (params: { params: { storyId: string } }) => {
+    const [versionAdded, setVersionAdded] = useState<string | null>(null);
     const [opened, { open, close }] = useDisclosure();
     const [story, setStory] = useState<IStory | null>(null);
     const id = params.params.storyId;
@@ -18,15 +21,24 @@ const StoryPage = (params: { params: { storyId: string } }) => {
         const fetchStory = async () => {
             const storyData = await getStory(id);
             setStory(storyData);
+            console.log(storyData, "a")
         };
 
         fetchStory();
-    }, [id]);
+    }, [id, versionAdded]);
 
     if (!story) {
-        return <div>Loading...</div>;
+        return (
+            <Center h={'300px'}>
+                <Loader />
+            </Center>
+        );
     }
 
+    const onVersionAdded = () => {
+        setVersionAdded(uuidv4());
+    };
+    
     function getVersionsBody() {
         if (!story?.versions.length) {
             return (
@@ -80,7 +92,16 @@ const StoryPage = (params: { params: { storyId: string } }) => {
                     {getVersionsBody()}
                 </Stack>
                 
-                <AddVersionModal opened={opened} close={close} storyId={id} versions={story.versions} />
+                <Space h={'md'} />
+                
+                <Files storyInfoId={id}/>
+                
+                <AddVersionModal
+                    opened={opened}
+                    close={close}
+                    storyId={id}
+                    versions={story.versions}
+                    onVersionAdded={onVersionAdded}/>
             </div>
 
             <Button
