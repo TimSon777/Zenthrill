@@ -12,6 +12,7 @@ import { versionToString } from "@/app/helpers";
 import { v4 as uuidv4 } from 'uuid';
 import publishVersion from "./publishVersion";
 import ModalTitle from '@/app/components/ModalTitle';
+import { showNotification } from "@mantine/notifications";
 
 const VersionsPage = (params: { params: { versionId: string } }) => {
     const [storyVersion, setStoryVersion] = useState<IStoryVersion | null>(null);
@@ -30,6 +31,26 @@ const VersionsPage = (params: { params: { versionId: string } }) => {
         publishVersion(id);
         openPublishModal();
         setStoryChanged(uuidv4());
+    };
+
+    const onCopyLink = (event: any) => {
+        event.preventDefault();
+        const link = `http://localhost:3000/stories/${id}`
+        navigator.clipboard.writeText(link)
+            .then(() => {
+                showNotification({
+                    title: 'Успех',
+                    message: 'Ссылка скопирована в буфер обмена!',
+                    color: 'green',
+                });
+            })
+            .catch((err) => {
+                showNotification({
+                    title: 'Ошибка',
+                    message: `Ошибка при копировании ссылки: ${err}`,
+                    color: 'red',
+                });
+            });
     };
 
     useEffect(() => {
@@ -61,6 +82,7 @@ const VersionsPage = (params: { params: { versionId: string } }) => {
                 <Button onClick={openBranchModal}>Добавь ветку</Button>
 
                 {!storyVersion.isPublished && storyVersion.entrypointId && <Button ml={'10px'} onClick={onPublishVersion}>Опубликовать</Button>}
+                {storyVersion.isPublished && <Button ml={'10px'} onClick={onCopyLink}>Скопировать ссылку на историю</Button>}
             </Center>
             <Space h="md" />
             <Card withBorder>
